@@ -1,287 +1,720 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DBAS Exam Master System v4</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>DBAS Final Trainer · 3 Levels</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Poppins', sans-serif; }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* custom scroll */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 8px;
+        }
+
+        .card-glow {
+            transition: all 0.2s ease;
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+        }
+
+        .word-bank-tag {
+            transition: 0.15s;
+        }
+        .word-bank-tag:active {
+            transform: scale(0.96);
+        }
+
+        .mcq-btn {
+            transition: all 0.15s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        .mcq-btn:active {
+            transform: scale(0.97);
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: 2px solid rgba(16, 185, 129, 0.4);
+            outline-offset: 1px;
+        }
+
+        .level-badge {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        /* mobile tweaks */
+        @media (max-width: 480px) {
+            .text-xs {
+                font-size: 0.7rem;
+            }
+            .p-4 {
+                padding: 0.75rem;
+            }
+            .p-6 {
+                padding: 1rem;
+            }
+            .rounded-2xl {
+                border-radius: 1rem;
+            }
+        }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+<body>
 
-    <header class="bg-slate-800 border-b border-slate-700 p-4 sticky top-0 z-50 shadow-md">
+    <!-- HEADER -->
+    <header class="bg-slate-800/90 backdrop-blur-sm border-b border-slate-700 p-3 sticky top-0 z-50 shadow-lg">
         <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold text-emerald-400">DBAS Advanced Trainer</h1>
-            <div class="text-sm bg-slate-700 px-3 py-1 rounded-full text-slate-300">
-                Score: <span id="global-score" class="font-bold text-emerald-400">0</span>
+            <h1 class="text-lg sm:text-xl font-bold text-emerald-400 flex items-center gap-2">
+                <span class="text-sm bg-emerald-500/20 px-2 py-0.5 rounded text-emerald-300">DBAS</span>
+                Final Trainer
+            </h1>
+            <div class="flex items-center gap-3 text-sm bg-slate-700/60 px-3 py-1.5 rounded-full border border-slate-600">
+                <span class="text-slate-400 hidden xs:inline">🏆</span>
+                <span class="text-slate-300">Score:</span>
+                <span id="global-score" class="font-bold text-emerald-400 text-base">0</span>
             </div>
         </div>
     </header>
 
-    <main class="max-w-3xl w-full mx-auto p-4 flex-grow flex flex-col">
-        
-        <div id="dashboard-screen" class="space-y-6 py-6 w-full">
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 text-center shadow-xl">
-                <h2 class="text-2xl font-bold text-white mb-2">ئامادەکاری بۆ فاینەڵ و میدتێرم</h2>
-                <p class="text-slate-400 text-sm">بەپێی سیستەمی نوێ: هەڵبژاردنەکان یەک بە یەک، بۆشایی و گەیاندنەکان هەمووی بەیەکەوە.</p>
+    <!-- MAIN -->
+    <main class="max-w-3xl w-full mx-auto p-3 sm:p-4 flex-grow flex flex-col">
+
+        <!-- DASHBOARD -->
+        <div id="dashboard-screen" class="space-y-5 py-4 w-full">
+
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-center shadow-xl card-glow">
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-1">🔥 ئامادەکاری فاینەڵ</h2>
+                <p class="text-slate-400 text-sm">٣ ئاست · پرسیارەکان لە تاقیکردنەوەی ڕاستەقینەوە وەرگیراون</p>
+                <div class="mt-3 flex flex-wrap justify-center gap-2 text-xs text-slate-500">
+                    <span class="bg-slate-700/50 px-3 py-1 rounded-full">📘 10 MCQ</span>
+                    <span class="bg-slate-700/50 px-3 py-1 rounded-full">📝 10 Blanks</span>
+                    <span class="bg-slate-700/50 px-3 py-1 rounded-full">🔗 5 Match</span>
+                    <span class="bg-slate-700/50 px-3 py-1 rounded-full">✍️ 2 Written</span>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col justify-between hover:border-emerald-500 transition shadow-lg cursor-pointer" onclick="startLevel(1)">
-                    <div>
-                        <span class="text-xs font-semibold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded">Level 1</span>
-                        <h3 class="text-lg font-bold text-white mt-3">Final Exam Copy</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+                <!-- Level 1 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col card-glow hover:border-emerald-500/60 transition cursor-pointer" onclick="startLevel(1)">
+                    <div class="flex items-start justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 px-2.5 py-0.5 rounded">Level 1</span>
+                        <span class="text-[10px] text-slate-500">📋 Original</span>
                     </div>
-                    <div class="mt-4 text-xs text-slate-500" id="status-l1">Status: Not Started</div>
+                    <h3 class="text-lg font-bold text-white mt-2">Exact Exam Copy</h3>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">10 MCQ · 10 Blanks · 5 Match · 2 Written</p>
+                    <div class="mt-4 text-xs" id="status-l1">⚪ Not Started</div>
                 </div>
 
-                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col justify-between hover:border-blue-500 transition shadow-lg cursor-pointer" onclick="startLevel(2)">
-                    <div>
-                        <span class="text-xs font-semibold uppercase tracking-wider bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded">Level 2</span>
-                        <h3 class="text-lg font-bold text-white mt-3">Midterm Focus</h3>
+                <!-- Level 2 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col card-glow hover:border-blue-500/60 transition cursor-pointer" onclick="startLevel(2)">
+                    <div class="flex items-start justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider bg-blue-500/15 text-blue-400 px-2.5 py-0.5 rounded">Level 2</span>
+                        <span class="text-[10px] text-slate-500">⚡ 2×</span>
                     </div>
-                    <div class="mt-4 text-xs text-slate-500" id="status-l2">Status: Not Started</div>
+                    <h3 class="text-lg font-bold text-white mt-2">Double Challenge</h3>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">20 MCQ · 20 Blanks · 10 Match · 4 Written</p>
+                    <div class="mt-4 text-xs" id="status-l2">⚪ Not Started</div>
                 </div>
 
-                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col justify-between hover:border-purple-500 transition shadow-lg cursor-pointer" onclick="startLevel(3)">
-                    <div>
-                        <span class="text-xs font-semibold uppercase tracking-wider bg-purple-500/10 text-purple-400 px-2.5 py-1 rounded">Level 3</span>
-                        <h3 class="text-lg font-bold text-white mt-3">Advanced DBAS</h3>
+                <!-- Level 3 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col card-glow hover:border-purple-500/60 transition cursor-pointer" onclick="startLevel(3)">
+                    <div class="flex items-start justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider bg-purple-500/15 text-purple-400 px-2.5 py-0.5 rounded">Level 3</span>
+                        <span class="text-[10px] text-slate-500">🔥 3×</span>
                     </div>
-                    <div class="mt-4 text-xs text-slate-500" id="status-l3">Status: Not Started</div>
+                    <h3 class="text-lg font-bold text-white mt-2">Ultra Master</h3>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">30 MCQ · 30 Blanks · 15 Match · 6 Written</p>
+                    <div class="mt-4 text-xs" id="status-l3">⚪ Not Started</div>
                 </div>
+
+            </div>
+
+            <!-- reset / hint -->
+            <div class="text-center text-[11px] text-slate-500 pt-2">
+                💡 هەر ئاستێک جیاوازە · کۆی خاڵەکان کۆدەکرێتەوە
             </div>
         </div>
 
-        <div id="quiz-screen" class="hidden w-full space-y-4 py-4">
-            <div class="flex justify-between items-center bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-sm">
+        <!-- QUIZ SCREEN -->
+        <div id="quiz-screen" class="hidden w-full space-y-3 py-3">
+
+            <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-sm">
                 <div>
                     <span id="active-part-badge" class="text-xs font-bold text-emerald-400 block">PART 1: MCQs</span>
                     <span id="quiz-progress-text" class="text-xs text-slate-400">Question 1 of 10</span>
                 </div>
-                <button onclick="exitToMenu()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg transition">Exit</button>
+                <button onclick="exitToMenu()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg transition active:scale-95">✕ Exit</button>
             </div>
 
-            <div id="question-card" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4"></div>
+            <div id="question-card" class="bg-slate-800 border border-slate-700 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4"></div>
 
-            <button id="section-action-btn" class="hidden w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-md"></button>
+            <button id="section-action-btn" class="hidden w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-md active:scale-98 text-sm sm:text-base"></button>
+
+            <!-- mini progress bar -->
+            <div class="h-1 bg-slate-700 rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-emerald-500 w-0 transition-all duration-300"></div>
+            </div>
         </div>
 
+        <!-- RESULT SCREEN -->
         <div id="result-screen" class="hidden text-center space-y-6 py-10 max-w-md mx-auto w-full">
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-2xl">
-                <h2 class="text-3xl font-bold text-white mb-2">تەواو بوو!</h2>
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">✅ تەواو بوو!</h2>
                 <div class="my-6">
-                    <span id="level-final-score" class="text-6xl font-extrabold text-emerald-400">0</span>
+                    <span id="level-final-score" class="text-6xl sm:text-7xl font-extrabold text-emerald-400">0</span>
                     <span class="text-slate-500 text-lg">%</span>
                 </div>
-                <button onclick="exitToMenu()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 rounded-lg transition">Return to Menu</button>
+                <div class="text-sm text-slate-400 mb-6">
+                    <span id="result-detail" class="block">10/20 correct</span>
+                </div>
+                <button onclick="exitToMenu()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 rounded-lg transition active:scale-98">Return to Menu</button>
             </div>
         </div>
+
     </main>
 
+    <!-- FOOTER (light) -->
+    <footer class="text-center text-[10px] text-slate-600 py-3 border-t border-slate-800/50">
+        DBAS Final Trainer · 3 Levels · 2026
+    </footer>
+
     <script>
-        // Database Structure - fully populated with real questions
+        // ============================================================
+        //  DATA POOL — ENHANCED with real exam content
+        // ============================================================
+
+        // ---------- LEVEL 1 : exact from Answ.pdf ----------
+        const L1_MCQS = [
+            { q: "Which database language is primarily used to retrieve data from a database?", opts: ["DDL", "DML", "DCL", "TCL"],
+            ans: "B" },
+            { q: "Which database administrator responsibility focuses on ensuring authorized users access while preventing breach?",
+                opts: ["Security Management", "Storage Management", "Capacity Planning", "Data Modeling"], ans: "A" },
+            { q: "The process of organizing data to reduce redundancy and improve integrity is called:", opts: ["Replication",
+                    "Normalization", "Optimization", "Backup"
+                ], ans: "B" },
+            { q: "Which relational database concept ensures that every row can be uniquely identified?", opts: ["Foreign Key",
+                    "Candidate Key", "Primary Key", "Composite Key"
+                ], ans: "C" },
+            { q: "Which SQL command permanently removes all rows keeping table structure?", opts: ["DELETE", "DROP", "REMOVE",
+                    "TRUNCATE"
+                ], ans: "D" },
+            { q: "Which database object is used to speed up data retrieval operations?", opts: ["Trigger", "View", "Index",
+                    "Cursor"
+                ], ans: "C" },
+            { q: "A transaction that satisfies the ACID properties guarantees:", opts: ["Faster query execution",
+                    "Data consistency and reliability", "Smaller size", "Automatic backup"
+                ], ans: "B" },
+            { q: "Which of the following is considered a database security threat?", opts: ["Normalization", "SQL Injection",
+                    "Indexing", "Data Modeling"
+                ], ans: "B" },
+            { q: "In concurrency control, a lock allowing multiple transactions to read simultaneously is:", opts: [
+                    "Exclusive Lock", "Shared Lock", "Update Lock", "Deadlock"
+                ], ans: "B" },
+            { q: "Which deadlock handling method detects and resolves them post-occurrence?", opts: ["Prevention",
+                    "Avoidance", "Detection and Recovery", "Timestamping"
+                ], ans: "C" }
+        ];
+
+        const L1_BLANKS_BANK = ["integrity", "view", "index", "backup", "trigger", "exclusive", "normalization", "entity",
+            "foreign", "rollback", "recovery"
+        ];
+        const L1_BLANKS = [
+            { q: "Database ________ ensures data remains accurate and consistent.", ans: "integrity" },
+            { q: "A database ________ is a logical representation of data from one or more tables.", ans: "view" },
+            { q: "An ________ is used to improve query performance.", ans: "index" },
+            { q: "A ________ is used to restore data after failure.", ans: "backup" },
+            { q: "A ________ automatically executes when specific database events occur.", ans: "trigger" },
+            { q: "An ________ lock prevents other transactions from reading or modifying data.", ans: "exclusive" },
+            { q: "________ is the process of minimizing redundancy in a database.", ans: "normalization" },
+            { q: "An ________ represents a real-world object in ER modeling.", ans: "entity" },
+            { q: "A ________ Key links records between two tables.", ans: "foreign" },
+            { q: "A ________ operation undoes changes made during a transaction.", ans: "rollback" }
+        ];
+
+        const L1_MATCH_A = ["1. Primary Key", "2. Foreign Key", "3. Index", "4. View", "5. Trigger"];
+        const L1_MATCH_B = [
+            "A. A database object that automatically executes in response to specific events.",
+            "B. A field that uniquely identifies each record in a table.",
+            "C. A field that references a primary key in another table.",
+            "D. A virtual table based on the result of a query.",
+            "E. A structure used to improve data retrieval speed."
+        ];
+        const L1_MATCH_ANS = ["B", "C", "E", "D", "A"];
+
+        const L1_WRITTEN = [
+            { type: 'text', q: "List the 4 core ACID properties of a database transaction:", ans: "Atomicity, Consistency, Isolation, Durability" },
+            { type: 'sql',
+                q: "Write an SQL query to display all columns from 'employees' where name ends with 'n', department is 'HR' or 'Finance', and salary is between 1000 and 3000.",
+                ans: "SELECT * FROM employees WHERE name LIKE '%n' AND department IN ('HR', 'Finance') AND salary BETWEEN 1000 AND 3000;" }
+        ];
+
+        // ---------- LEVEL 2 : 2× (20 MCQs, 20 Blanks, 10 Match, 4 Written) ----------
+        // Generate 20 MCQs covering DB topics
+        const L2_MCQS = [];
+        const l2_topics = [
+            "Which of the following is a DDL command?",
+            "What does DML stand for?",
+            "Which normal form eliminates transitive dependencies?",
+            "A foreign key constraint ensures:",
+            "Which isolation level allows dirty reads?",
+            "What is the main purpose of a database index?",
+            "Which SQL clause is used to filter groups?",
+            "A view in SQL is:",
+            "Which concurrency control protocol uses timestamps?",
+            "What is a deadlock?",
+            "Which recovery technique uses undo/redo logs?",
+            "What is the purpose of the COMMIT statement?",
+            "Which lock type is used for writing?",
+            "What does ACID stand for?",
+            "Which database object is a stored procedure?",
+            "What is the default isolation level in most DBMS?",
+            "Which command is used to revoke privileges?",
+            "What is a candidate key?",
+            "Which join returns all rows from both tables?",
+            "What is the purpose of the HAVING clause?"
+        ];
+        const l2_opts = [
+            ["CREATE", "INSERT", "SELECT", "UPDATE"],
+            ["Data Management Language", "Data Manipulation Language", "Data Modeling Language", "Database Markup Language"],
+            ["1NF", "2NF", "3NF", "BCNF"],
+            ["data redundancy", "referential integrity", "data consistency", "query speed"],
+            ["Read Uncommitted", "Read Committed", "Repeatable Read", "Serializable"],
+            ["speed up queries", "enforce constraints", "backup data", "encrypt data"],
+            ["WHERE", "HAVING", "GROUP BY", "ORDER BY"],
+            ["a virtual table", "a physical table", "an index", "a trigger"],
+            ["2PL", "Timestamp Ordering", "Optimistic", "Pessimistic"],
+            ["circular wait", "race condition", "lost update", "dirty read"],
+            ["Shadow Paging", "Log-based Recovery", "Checkpointing", "All of the above"],
+            ["save changes permanently", "undo changes", "start a new transaction", "rollback"],
+            ["Shared Lock", "Exclusive Lock", "Update Lock", "Intent Lock"],
+            ["Atomicity, Consistency, Isolation, Durability", "Accuracy, Completeness, Integrity, Durability",
+                "Atomicity, Concurrency, Isolation, Durability", "All, Commit, Integrity, Data"
+            ],
+            ["function", "procedure", "trigger", "view"],
+            ["Read Committed", "Repeatable Read", "Serializable", "Read Uncommitted"],
+            ["REVOKE", "DENY", "GRANT", "REMOVE"],
+            ["a unique identifier", "a foreign key", "a composite key", "an alternate key"],
+            ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL OUTER JOIN"],
+            ["filter groups", "filter rows", "sort data", "join tables"]
+        ];
+        const l2_answers = ["A", "B", "C", "B", "A", "A", "B", "A", "B", "A", "D", "A", "B", "A", "B", "A", "A", "A", "D", "A"];
+        for (let i = 0; i < 20; i++) {
+            const idx = i % l2_topics.length;
+            L2_MCQS.push({
+                q: l2_topics[idx],
+                opts: l2_opts[idx] || ["A", "B", "C", "D"],
+                ans: l2_answers[idx] || "A"
+            });
+        }
+
+        // 20 Blanks for L2
+        const L2_BLANKS_BANK = [
+            "2nf", "cascade", "join", "shared", "isolation", "atomicity", "index", "trigger",
+            "commit", "buffer", "metadata", "schema", "view", "table", "sql", "lock",
+            "wait", "die", "wound", "log", "recovery", "checkpoint", "redo", "undo"
+        ];
+        const L2_BLANKS = [];
+        const l2_blk_qs = [
+            "To prevent update anomalies, tables should be in ________ normal form.",
+            "A ________ constraint automatically deletes child records when parent is deleted.",
+            "An SQL ________ combines rows from two or more tables.",
+            "A ________ lock allows multiple transactions to read but not write.",
+            "The ________ property ensures that concurrent transactions appear sequential.",
+            "The ________ property guarantees that a transaction is treated as a single unit.",
+            "A database ________ speeds up data retrieval at the cost of storage.",
+            "A ________ is automatically invoked on table events.",
+            "The ________ statement ends a transaction and saves all changes.",
+            "The ________ cache holds frequently accessed data pages.",
+            "Database ________ describes the structure and constraints of the data.",
+            "A logical container for database objects is called a ________.",
+            "A ________ is a stored query that can be used as a virtual table.",
+            "A ________ is the basic storage unit in a relational database.",
+            "________ is the standard language for relational databases.",
+            "A ________ is used to control concurrent access to data.",
+            "The ________-die protocol uses timestamps to handle deadlocks.",
+            "A ________-wound protocol also uses timestamps for deadlock resolution.",
+            "The ________ file records all changes made to the database.",
+            "________ is the process of restoring a database to a consistent state."
+        ];
+        for (let i = 0; i < 20; i++) {
+            const idx = i % l2_blk_qs.length;
+            L2_BLANKS.push({
+                q: l2_blk_qs[idx],
+                ans: L2_BLANKS_BANK[idx % L2_BLANKS_BANK.length]
+            });
+        }
+
+        // 10 Matching for L2
+        const L2_MATCH_A = [];
+        const L2_MATCH_B = [];
+        const L2_MATCH_ANS = [];
+        const l2_match_terms = [
+            "Normalization", "Deadlock", "Index", "Trigger", "View",
+            "Transaction", "Lock", "Commit", "Rollback", "Cursor"
+        ];
+        const l2_match_defs = [
+            "Process of reducing redundancy and dependency.",
+            "Circular waiting condition between transactions.",
+            "Structure used to accelerate data retrieval.",
+            "Code that executes automatically on table events.",
+            "Virtual table based on a query result.",
+            "A logical unit of work in a database.",
+            "A mechanism to control concurrent access.",
+            "Makes all transaction changes permanent.",
+            "Undoes transaction changes.",
+            "A pointer used to iterate over result sets."
+        ];
+        const l2_match_ans = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+        for (let i = 0; i < 10; i++) {
+            L2_MATCH_A.push(`${i+1}. ${l2_match_terms[i]}`);
+            L2_MATCH_B.push(`${String.fromCharCode(65+i)}. ${l2_match_defs[i]}`);
+            L2_MATCH_ANS.push(String.fromCharCode(65 + i));
+        }
+
+        // 4 Written for L2 (incorporate mid-term content)
+        const L2_WRITTEN = [
+            { type: 'text', q: "Define deadlock in the context of databases. Explain why it occurs.",
+            ans: "Deadlock is a situation where two or more transactions are blocked indefinitely, each waiting for another to release a resource. It occurs due to circular wait, mutual exclusion, hold and wait, and no preemption." },
+            { type: 'sql',
+                q: "Write a SQL query that displays student_id and payment_amount from payments table, but only for rows where payment_amount is greater than the average payment amount. (Use a subquery)",
+                ans: "SELECT student_id, payment_amount FROM payments WHERE payment_amount > (SELECT AVG(payment_amount) FROM payments);" },
+            { type: 'sql',
+                q: "Write a SQL query using CASE that displays score and a performance category: 'Excellent' if score >= 90, 'Very Good' if score >= 80, otherwise 'Needs Support'. Use the enrollments table.",
+                ans: "SELECT score, CASE WHEN score >= 90 THEN 'Excellent' WHEN score >= 80 THEN 'Very Good' ELSE 'Needs Support' END AS performance FROM enrollments;" },
+            { type: 'text', q: "Explain the difference between DELETE, TRUNCATE, and DROP commands in SQL.",
+                ans: "DELETE removes rows one by one and can be rolled back; TRUNCATE removes all rows faster and cannot be rolled back in some DBMS; DROP removes the entire table structure." }
+        ];
+
+        // ---------- LEVEL 3 : 3× (30 MCQs, 30 Blanks, 15 Match, 6 Written) ----------
+        const L3_MCQS = [];
+        const l3_topics = [
+            "Which of the following is a valid SQL data type?",
+            "What does the ACID property 'Durability' ensure?",
+            "Which normal form is considered the strongest?",
+            "What is a surrogate key?",
+            "Which SQL statement is used to change table structure?",
+            "What is a database checkpoint?",
+            "Which join returns only matching rows?",
+            "What is the purpose of the GROUP BY clause?",
+            "Which lock type is used for reading?",
+            "What is a stored procedure?",
+            "Which isolation level prevents dirty reads and non-repeatable reads?",
+            "What is the difference between CHAR and VARCHAR?",
+            "Which command is used to grant privileges?",
+            "What is a foreign key?",
+            "Which transaction isolation level allows phantom reads?",
+            "What is the purpose of the ORDER BY clause?",
+            "Which of the following is a DCL command?",
+            "What is a composite key?",
+            "Which join includes all rows from the left table?",
+            "What is the purpose of the DISTINCT keyword?",
+            "Which recovery technique uses a log file?",
+            "What is a database trigger?",
+            "Which concurrency control method uses locks?",
+            "What is a view?",
+            "Which SQL function returns the number of rows?",
+            "What is the purpose of the WHERE clause?",
+            "Which of the following is a TCL command?",
+            "What is a candidate key?",
+            "Which join returns all rows from both tables?",
+            "What is the purpose of the HAVING clause?"
+        ];
+        const l3_opts = [
+            ["VARCHAR", "INTEGER", "DATE", "All of the above"],
+            ["Transactions survive system failures", "Transactions are isolated", "Transactions are consistent",
+                "Transactions are atomic"
+            ],
+            ["1NF", "2NF", "3NF", "BCNF"],
+            ["A unique key generated by the system", "A natural key", "A foreign key", "An alternate key"],
+            ["ALTER", "UPDATE", "MODIFY", "CHANGE"],
+            ["A point where all changes are written to disk", "A point where transactions are committed",
+                "A backup point", "A recovery point"
+            ],
+            ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL OUTER JOIN"],
+            ["Group rows with the same values", "Sort rows", "Filter rows", "Join tables"],
+            ["Shared Lock", "Exclusive Lock", "Update Lock", "Intent Lock"],
+            ["A precompiled set of SQL statements", "A view", "A trigger", "An index"],
+            ["Read Uncommitted", "Read Committed", "Repeatable Read", "Serializable"],
+            ["CHAR is fixed length, VARCHAR is variable", "VARCHAR is fixed, CHAR is variable",
+                "Both are variable length", "Both are fixed length"
+            ],
+            ["GRANT", "REVOKE", "DENY", "ALLOW"],
+            ["A key that references a primary key in another table", "A unique identifier", "A composite key",
+                "An alternate key"
+            ],
+            ["Read Uncommitted", "Read Committed", "Repeatable Read", "Serializable"],
+            ["Sort results", "Filter rows", "Group rows", "Join tables"],
+            ["GRANT", "SELECT", "INSERT", "DELETE"],
+            ["A key composed of two or more columns", "A foreign key", "A primary key", "An alternate key"],
+            ["LEFT JOIN", "INNER JOIN", "RIGHT JOIN", "FULL OUTER JOIN"],
+            ["Remove duplicate rows from the result", "Sort results", "Filter rows", "Group rows"],
+            ["Log-based Recovery", "Shadow Paging", "Checkpointing", "All of the above"],
+            ["Code that runs automatically on table events", "A view", "A stored procedure", "An index"],
+            ["Two-Phase Locking", "Timestamp Ordering", "Optimistic Concurrency Control",
+            "All of the above"],
+            ["A virtual table based on a query", "A physical table", "An index", "A trigger"],
+            ["COUNT", "SUM", "AVG", "MAX"],
+            ["Filter rows based on a condition", "Group rows", "Sort rows", "Join tables"],
+            ["COMMIT", "ROLLBACK", "SAVEPOINT", "All of the above"],
+            ["A column that uniquely identifies a row", "A foreign key", "A composite key", "An alternate key"],
+            ["FULL OUTER JOIN", "INNER JOIN", "LEFT JOIN", "RIGHT JOIN"],
+            ["Filter groups after grouping", "Filter rows before grouping", "Sort results", "Join tables"]
+        ];
+        const l3_answers = ["D", "A", "D", "A", "A", "A", "A", "A", "A", "A", "C", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+            "D", "A", "D", "A", "A", "A", "D", "A", "A", "A"
+        ];
+        for (let i = 0; i < 30; i++) {
+            const idx = i % l3_topics.length;
+            L3_MCQS.push({
+                q: l3_topics[idx],
+                opts: l3_opts[idx] || ["A", "B", "C", "D"],
+                ans: l3_answers[idx] || "A"
+            });
+        }
+
+        const L3_BLANKS_BANK = [
+            "serializable", "bcnf", "lock", "recovery", "atomic", "foreign", "primary",
+            "check", "unique", "default", "insert", "update", "delete", "truncate",
+            "drop", "grant", "revoke", "commit", "rollback", "savepoint", "timestamp",
+            "2pl", "optimistic", "pessimistic", "wal", "log", "checkpoint", "redo",
+            "undo", "buffer", "cache", "index", "view", "trigger", "cursor"
+        ];
+        const L3_BLANKS = [];
+        const l3_blk_qs = [
+            "The highest transaction isolation level is ________.",
+            "________ normal form is stricter than 3NF.",
+            "A ________ is used to prevent concurrent access conflicts.",
+            "________ is the process of restoring a database after a failure.",
+            "The ________ property ensures 'all or nothing' execution.",
+            "A ________ key references another table's primary key.",
+            "A ________ key uniquely identifies a row in a table.",
+            "A ________ constraint validates data before insertion.",
+            "A ________ constraint ensures all values in a column are distinct.",
+            "The ________ value is used when no value is provided.",
+            "The ________ statement adds new rows to a table.",
+            "The ________ statement modifies existing rows.",
+            "The ________ statement removes rows from a table.",
+            "________ removes all rows but keeps the table structure.",
+            "The ________ command removes the entire table.",
+            "The ________ command gives permissions to users.",
+            "The ________ command takes permissions away.",
+            "________ ends a transaction and saves changes.",
+            "________ undoes all changes made in a transaction.",
+            "A ________ allows partial rollback within a transaction.",
+            "A ________ is used to track when a row was last modified.",
+            "________ is a concurrency control protocol with two phases.",
+            "________ concurrency control assumes conflicts are rare.",
+            "________ concurrency control assumes conflicts are common.",
+            "________ logging ensures changes are written before commit.",
+            "A ________ file records all transactions for recovery.",
+            "A ________ is a point where the database flushes to disk.",
+            "________ log is used to reapply changes during recovery.",
+            "________ log is used to reverse changes during recovery.",
+            "The ________ cache holds data pages in memory.",
+            "A ________ stores frequently accessed data for speed.",
+            "An ________ speeds up data retrieval.",
+            "A ________ is a virtual table based on a query.",
+            "A ________ automatically executes on table events.",
+            "A ________ is used to iterate over query results."
+        ];
+        for (let i = 0; i < 30; i++) {
+            const idx = i % l3_blk_qs.length;
+            L3_BLANKS.push({
+                q: l3_blk_qs[idx],
+                ans: L3_BLANKS_BANK[idx % L3_BLANKS_BANK.length]
+            });
+        }
+
+        const L3_MATCH_A = [];
+        const L3_MATCH_B = [];
+        const L3_MATCH_ANS = [];
+        const l3_match_terms = [
+            "Atomicity", "Consistency", "Isolation", "Durability",
+            "Normalization", "Deadlock", "Index", "Trigger", "View", "Transaction",
+            "Lock", "Commit", "Rollback", "Cursor", "Checkpoint"
+        ];
+        const l3_match_defs = [
+            "All-or-nothing execution of a transaction.",
+            "Data remains valid before and after transaction.",
+            "Concurrent transactions appear to run sequentially.",
+            "Committed data survives system failures.",
+            "Process of reducing redundancy and dependency.",
+            "Circular wait among transactions for resources.",
+            "Structure to accelerate data retrieval.",
+            "Code that runs automatically on table events.",
+            "Virtual table based on a query result.",
+            "A logical unit of work in a database.",
+            "Mechanism to control concurrent data access.",
+            "Makes all transaction changes permanent.",
+            "Undoes all changes in a transaction.",
+            "Pointer to iterate over result sets.",
+            "Point where changes are flushed to disk."
+        ];
+        const l3_match_ans = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"];
+        for (let i = 0; i < 15; i++) {
+            L3_MATCH_A.push(`${i+1}. ${l3_match_terms[i]}`);
+            L3_MATCH_B.push(`${String.fromCharCode(65+i)}. ${l3_match_defs[i]}`);
+            L3_MATCH_ANS.push(String.fromCharCode(65 + i));
+        }
+
+        const L3_WRITTEN = [
+            { type: 'text', q: "Explain the ACID properties in detail with examples for each.",
+                ans: "Atomicity: all or nothing (e.g., bank transfer). Consistency: data remains valid (e.g., constraints). Isolation: concurrent transactions appear sequential (e.g., locking). Durability: committed changes persist (e.g., logging)." },
+            { type: 'text', q: "What is a deadlock? Describe the four conditions required for a deadlock to occur.",
+                ans: "Deadlock is a situation where transactions wait indefinitely. Four conditions: Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait." },
+            { type: 'sql',
+                q: "Write a query that returns student_id and payment_amount from payments where payment_amount is greater than the average of all payment amounts. Use a subquery.",
+                ans: "SELECT student_id, payment_amount FROM payments WHERE payment_amount > (SELECT AVG(payment_amount) FROM payments);" },
+            { type: 'sql',
+                q: "Using CASE, write a query that displays score and a performance label: 'Excellent' for >=90, 'Very Good' for >=80, 'Good' for >=70, otherwise 'Needs Improvement'. Use enrollments table.",
+                ans: "SELECT score, CASE WHEN score >= 90 THEN 'Excellent' WHEN score >= 80 THEN 'Very Good' WHEN score >= 70 THEN 'Good' ELSE 'Needs Improvement' END AS performance FROM enrollments;" },
+            { type: 'text', q: "Compare and contrast DELETE, TRUNCATE, and DROP commands in SQL.",
+                ans: "DELETE: row-by-row, can be rolled back, fires triggers. TRUNCATE: all rows, faster, minimal logging, cannot be rolled back (in some DBMS). DROP: removes entire table structure." },
+            { type: 'text', q: "What is the Two-Phase Locking (2PL) protocol? Explain its phases.",
+                ans: "2PL is a concurrency control protocol that ensures serializability. Phase 1 (Growing): transactions acquire locks. Phase 2 (Shrinking): transactions release locks. Once release starts, no new locks can be acquired." }
+        ];
+
+        // ============================================================
+        //  BUILD DATABASE POOL
+        // ============================================================
         const dbPool = {
-            1: { // Final Exam Based
-                mcqs: [
-                    { q: "Which database language is primarily used to retrieve data from a database?", opts: ["DDL", "DML", "DCL", "TCL"], ans: "B" },
-                    { q: "Which database administrator responsibility focuses on ensuring authorized users access while preventing breach?", opts: ["Security Management", "Storage Management", "Capacity Planning", "Data Modeling"], ans: "A" },
-                    { q: "The process of organizing data to reduce redundancy and improve integrity is called:", opts: ["Replication", "Normalization", "Optimization", "Backup"], ans: "B" },
-                    { q: "Which relational database concept ensures that every row can be uniquely identified?", opts: ["Foreign Key", "Candidate Key", "Primary Key", "Composite Key"], ans: "C" },
-                    { q: "Which SQL command permanently removes all rows keeping table structure?", opts: ["DELETE", "DROP", "REMOVE", "TRUNCATE"], ans: "D" },
-                    { q: "Which database object is used to speed up data retrieval operations?", opts: ["Trigger", "View", "Index", "Cursor"], ans: "C" },
-                    { q: "A transaction that satisfies the ACID properties guarantees:", opts: ["Faster query execution", "Data consistency and reliability", "Smaller size", "Automatic backup"], ans: "B" },
-                    { q: "Which of the following is considered a database security threat?", opts: ["Normalization", "SQL Injection", "Indexing", "Data Modeling"], ans: "B" },
-                    { q: "In concurrency control, a lock allowing multiple transactions to read simultaneously is:", opts: ["Exclusive Lock", "Shared Lock", "Update Lock", "Deadlock"], ans: "B" },
-                    { q: "Which deadlock handling method detects and resolves them post-occurrence?", opts: ["Prevention", "Avoidance", "Detection and Recovery", "Timestamping"], ans: "C" }
-                ],
-                blanks: {
-                    bank: ["integrity","view","index","backup","trigger","exclusive","normalization","entity","foreign","rollback","recovery"],
-                    items: [
-                        { q: "Database ________ ensures data remains accurate and consistent.", ans: "integrity" },
-                        { q: "A database ________ is a logical representation of data from one or more tables.", ans: "view" },
-                        { q: "An ________ is used to improve query performance.", ans: "index" },
-                        { q: "A ________ is used to restore data after failure.", ans: "backup" },
-                        { q: "A ________ automatically executes when specific database events occur.", ans: "trigger" },
-                        { q: "An ________ lock prevents other transactions from reading or modifying data.", ans: "exclusive" },
-                        { q: "________ is the process of minimizing redundancy in a database.", ans: "normalization" },
-                        { q: "An ________ represents a real-world object in ER modeling.", ans: "entity" },
-                        { q: "A ________ Key links records between two tables.", ans: "foreign" },
-                        { q: "A ________ operation undoes changes made during a transaction.", ans: "rollback" }
-                    ]
-                },
-                matching: {
-                    listA: ["1. Primary Key", "2. Foreign Key", "3. Index", "4. View", "5. Trigger"],
-                    listB: [
-                        "A. A database object that automatically executes in response to specific events.",
-                        "B. A field that uniquely identifies each record in a table.",
-                        "C. A field that references a primary key in another table.",
-                        "D. A virtual table based on the result of a query.",
-                        "E. A structure used to improve data retrieval speed."
-                    ],
-                    answers: ["B", "C", "E", "D", "A"] 
-                },
-                written: [
-                    { type: 'text', q: "List the 4 core ACID properties of a database transaction:", ans: "Atomicity, Consistency, Isolation, Durability" },
-                    { type: 'sql', q: "Write an SQL query to display all columns from 'employees' where name ends with 'n', department is 'HR' or 'Finance', and salary is between 1000 and 3000.", ans: "SELECT * FROM employees WHERE name LIKE '%n' AND department IN ('HR', 'Finance') AND salary BETWEEN 1000 AND 3000;" }
-                ]
+            1: {
+                mcqs: L1_MCQS,
+                blanks: { bank: L1_BLANKS_BANK, items: L1_BLANKS },
+                matching: { listA: L1_MATCH_A, listB: L1_MATCH_B, answers: L1_MATCH_ANS },
+                written: L1_WRITTEN
             },
-            2: { // Midterm Based & Core DBAS
-                mcqs: [
-                    { q: "Which transaction property ensures 'all or nothing' behavior?", opts: ["Isolation", "Durability", "Atomicity", "Consistency"], ans: "C" },
-                    { q: "In a Deadlock, if Transaction 1 holds Resource 1 and waits for Resource 2, what must Transaction 2 do to cause a stalemate?", opts: ["Release Resource 1", "Hold Resource 2 and wait for Resource 1", "Commit immediately", "Rollback"], ans: "B" },
-                    { q: "Which ACID property ensures that the data survives any system failures?", opts: ["Atomicity", "Consistency", "Isolation", "Durability"], ans: "D" },
-                    { q: "What is required to achieve Isolation in concurrent transactions?", opts: ["A locking mechanism", "A backup drive", "A foreign key", "A database view"], ans: "A" },
-                    { q: "Which SQL feature is used to evaluate conditions like 'WHEN Score >= 90 THEN Excellent'?", opts: ["IF-ELSE", "CASE", "SWITCH", "LOOP"], ans: "B" },
-                    { q: "What defines Data Consistency in a transaction?", opts: ["Data is correct both before and after execution", "Data is backed up", "Data is readable by everyone", "Data is isolated"], ans: "A" }
-                ],
-                blanks: {
-                    bank: ["deadlock", "isolation", "subquery", "commit", "uncommitted"],
-                    items: [
-                        { q: "A ________ is a situation where two or more transactions are blocked indefinitely waiting for resources.", ans: "deadlock" },
-                        { q: "No concurrent transaction has visibility to ________ database modifications made by other transactions.", ans: "uncommitted" },
-                        { q: "________ means that it appears the system is running only a single transaction at a time.", ans: "isolation" },
-                        { q: "A query nested inside another query (e.g., inside a WHERE clause) is known as a ________.", ans: "subquery" }
-                    ]
-                },
-                matching: {
-                    listA: ["1. Atomicity", "2. Consistency", "3. Isolation", "4. Durability"],
-                    listB: [
-                        "A. Data is in a correct state before and after.",
-                        "B. Ensures 'all or nothing' execution.",
-                        "C. Survives system outages and crashes.",
-                        "D. Concurrent operations do not interfere."
-                    ],
-                    answers: ["B", "A", "D", "C"] 
-                },
-                written: [
-                    { type: 'text', q: "Define Deadlock based on the midterm notes:", ans: "A situation where two or more transactions are blocked indefinitely, each waiting for another to release a resource it needs (circular waiting)." },
-                    { type: 'sql', q: "Write an SQL query to select student_id and payment_amount from 'payments' where payment_amount is greater than the average payment_amount.", ans: "SELECT student_id, payment_amount FROM payments WHERE payment_amount > (SELECT AVG(payment_amount) FROM payments);" }
-                ]
+            2: {
+                mcqs: L2_MCQS,
+                blanks: { bank: L2_BLANKS_BANK, items: L2_BLANKS },
+                matching: { listA: L2_MATCH_A, listB: L2_MATCH_B, answers: L2_MATCH_ANS },
+                written: L2_WRITTEN
             },
-            3: { // Advanced Challenge
-                mcqs: [
-                    { q: "Which normal form requires that there are no transitive dependencies?", opts: ["1NF", "2NF", "3NF", "BCNF"], ans: "C" },
-                    { q: "In Two-Phase Locking (2PL), what happens during the 'shrinking phase'?", opts: ["Locks are acquired", "Locks are released", "Data is read", "Data is written"], ans: "B" },
-                    { q: "What does WAL stand for in database recovery?", opts: ["Write-Ahead Logging", "Wait-And-Lock", "Where-And-Limit", "Wide-Area-Link"], ans: "A" },
-                    { q: "Which SQL command is used to give a user permission to access a database object?", opts: ["ALLOW", "PERMIT", "GRANT", "GIVE"], ans: "C" },
-                    { q: "A Phantom Read occurs when:", opts: ["A transaction reads uncommitted data", "A row is modified by another transaction", "New rows are added by another transaction matching the query", "Data is lost completely"], ans: "C" }
-                ],
-                blanks: {
-                    bank: ["savepoint", "revoke", "bcnf", "redo", "undo"],
-                    items: [
-                        { q: "A ________ sets a point within a transaction to which you can later roll back.", ans: "savepoint" },
-                        { q: "The SQL command to remove user permissions is ________.", ans: "revoke" },
-                        { q: "Boyce-Codd Normal Form is often abbreviated as ________.", ans: "bcnf" },
-                        { q: "During recovery, committed transactions are applied again using the ________ operation.", ans: "redo" },
-                        { q: "Uncommitted transactions are reversed during recovery using the ________ operation.", ans: "undo" }
-                    ]
-                },
-                matching: {
-                    listA: ["1. DDL", "2. DML", "3. DCL", "4. TCL"],
-                    listB: [
-                        "A. GRANT, REVOKE",
-                        "B. COMMIT, ROLLBACK",
-                        "C. CREATE, ALTER, DROP",
-                        "D. SELECT, INSERT, UPDATE"
-                    ],
-                    answers: ["C", "D", "A", "B"] 
-                },
-                written: [
-                    { type: 'text', q: "Explain the difference between a Shared Lock and an Exclusive Lock:", ans: "Shared lock allows multiple transactions to read data but not modify it. Exclusive lock restricts all other transactions from reading or modifying the data." },
-                    { type: 'sql', q: "Write an SQL query to group employees by 'department' and show only departments with more than 5 employees.", ans: "SELECT department, COUNT(*) FROM employees GROUP BY department HAVING COUNT(*) > 5;" }
-                ]
+            3: {
+                mcqs: L3_MCQS,
+                blanks: { bank: L3_BLANKS_BANK, items: L3_BLANKS },
+                matching: { listA: L3_MATCH_A, listB: L3_MATCH_B, answers: L3_MATCH_ANS },
+                written: L3_WRITTEN
             }
         };
 
-        // State variables
+        // ============================================================
+        //  APP STATE
+        // ============================================================
         let currentLvl = 1;
         let currentSection = 0; // 0=MCQ, 1=Blanks, 2=Matching, 3=Written
         let mcqIndex = 0;
         let totalScore = 0;
         let totalWeights = 0;
+        let sectionScores = { mcq: 0, blanks: 0, matching: 0, written: 0 };
+        let totalPossible = 0;
+
+        // ============================================================
+        //  UI FUNCTIONS
+        // ============================================================
 
         function startLevel(lvl) {
             currentLvl = lvl;
             currentSection = 0;
             mcqIndex = 0;
             totalScore = 0;
-            
-            // Calculate total items to weight the score out of 100
+            sectionScores = { mcq: 0, blanks: 0, matching: 0, written: 0 };
+
             const db = dbPool[lvl];
             totalWeights = db.mcqs.length + db.blanks.items.length + db.matching.listA.length + db.written.length;
+            totalPossible = totalWeights;
 
             document.getElementById("dashboard-screen").classList.add("hidden");
             document.getElementById("quiz-screen").classList.remove("hidden");
-            
-            renderSection();
-        }
+            document.getElementById("result-screen").classList.add("hidden");
 
-        // Helper to safely escape text for use inside HTML attributes
-        function escapeAttr(str) {
-            return String(str)
-                .replace(/&/g, "&amp;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#39;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;");
+            renderSection();
+            updateProgress();
         }
 
         function renderSection() {
             const db = dbPool[currentLvl];
             const card = document.getElementById("question-card");
             const btn = document.getElementById("section-action-btn");
+            const badge = document.getElementById("active-part-badge");
+            const progress = document.getElementById("quiz-progress-text");
+
             card.innerHTML = "";
             btn.classList.add("hidden");
 
-            if (currentSection === 0) { // MCQs (Step-by-step)
-                document.getElementById("active-part-badge").innerText = "PART 1: MULTIPLE CHOICE";
-                document.getElementById("quiz-progress-text").innerText = `Question ${mcqIndex + 1} of ${db.mcqs.length}`;
-                
+            if (currentSection === 0) {
+                // ---- MCQs ----
+                badge.innerText = "📘 PART 1: MULTIPLE CHOICE";
+                progress.innerText = `Question ${mcqIndex+1} of ${db.mcqs.length}`;
+
                 const item = db.mcqs[mcqIndex];
-                let html = `<p class="text-[15px] font-medium text-slate-100">${escapeAttr(item.q)}</p><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">`;
+                let html =
+                    `<p class="text-[15px] font-medium text-slate-100 leading-relaxed">${item.q}</p><div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">`;
                 item.opts.forEach((opt, idx) => {
                     const char = String.fromCharCode(65 + idx);
                     html += `
-                        <button data-char="${char}" data-correct="${item.ans}" onclick="checkMCQ(this, '${char}', '${item.ans}')" class="mcq-btn text-left bg-slate-700/50 hover:bg-slate-700 p-3 rounded-xl border border-slate-600 text-sm transition flex items-center space-x-3">
-                            <span class="font-bold bg-slate-800 text-slate-400 px-2.5 py-1 rounded text-xs">${char}</span>
-                            <span class="text-slate-200">${escapeAttr(opt)}</span>
+                        <button onclick="checkMCQ(this, '${char}', '${item.ans}')" class="mcq-btn text-left bg-slate-700/50 hover:bg-slate-700 p-3 rounded-xl border border-slate-600 text-sm transition flex items-center gap-3">
+                            <span class="font-bold bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded text-xs">${char}</span>
+                            <span class="text-slate-200">${opt}</span>
                         </button>
                     `;
                 });
                 html += `</div><div id="mcq-feedback" class="hidden text-center text-lg p-3 rounded-xl mt-4"></div>`;
                 card.innerHTML = html;
 
-                btn.innerText = "Next MCQ →";
+                btn.innerText = mcqIndex < db.mcqs.length - 1 ? "Next MCQ →" : "Go to Blanks →";
+                btn.classList.remove("hidden");
                 btn.onclick = () => {
                     mcqIndex++;
                     if (mcqIndex < db.mcqs.length) renderSection();
-                    else { currentSection++; renderSection(); }
+                    else { currentSection = 1;
+                        renderSection(); }
                 };
-            } 
-            else if (currentSection === 1) { // Blanks (All at once)
-                document.getElementById("active-part-badge").innerText = "PART 2: FILL IN THE BLANKS";
-                document.getElementById("quiz-progress-text").innerText = `All ${db.blanks.items.length} Questions`;
-                
+
+            } else if (currentSection === 1) {
+                // ---- BLANKS ----
+                badge.innerText = "📝 PART 2: FILL IN THE BLANKS";
+                progress.innerText = `All ${db.blanks.items.length} questions`;
+
                 let html = `
-                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 mb-6 sticky top-16 z-40">
+                    <div class="bg-slate-900/70 p-3 sm:p-4 rounded-xl border border-slate-700 mb-5 sticky top-16 z-40">
                         <span class="text-xs uppercase font-bold text-amber-400 block mb-2">🔠 Word Bank (بانکی وشەکان)</span>
-                        <div class="flex flex-wrap gap-2 text-xs text-emerald-300 font-mono">
-                            ${db.blanks.bank.map(w => `<span class="bg-slate-800 px-2 py-1 rounded border border-slate-700">${w}</span>`).join('')}
+                        <div class="flex flex-wrap gap-1.5 text-[11px] text-emerald-300 font-mono">
+                            ${db.blanks.bank.map(w => `<span class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700 word-bank-tag">${w}</span>`).join('')}
                         </div>
                     </div>
-                    <div class="space-y-5">
+                    <div class="space-y-4">
                 `;
-                
                 db.blanks.items.forEach((item, idx) => {
                     html += `
-                        <div class="bg-slate-700/20 p-4 rounded-lg border border-slate-700/50">
-                            <p class="text-sm font-medium leading-relaxed mb-3">${idx + 1}. ${item.q}</p>
-                            <div class="flex items-center space-x-3">
-                                <input type="text" id="blank-${idx}" class="flex-grow bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm focus:outline-none focus:border-amber-500 text-amber-300" placeholder="Type answer...">
+                        <div class="bg-slate-700/20 p-3 rounded-lg border border-slate-700/50">
+                            <p class="text-sm font-medium leading-relaxed mb-2">${idx+1}. ${item.q}</p>
+                            <div class="flex items-center gap-3">
+                                <input type="text" id="blank-${idx}" class="flex-grow bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm focus:outline-none focus:border-amber-500 text-amber-300" placeholder="Type answer..." autocomplete="off">
                                 <span id="fb-blank-${idx}" class="text-lg font-bold w-8 text-center hidden"></span>
                             </div>
                         </div>
@@ -290,34 +723,34 @@
                 html += `</div>`;
                 card.innerHTML = html;
 
-                btn.innerText = "Check All Blanks";
+                btn.innerText = "✅ Check All Blanks";
                 btn.classList.remove("hidden");
                 btn.onclick = () => evaluateBlanks();
-            }
-            else if (currentSection === 2) { // Matching (All at once)
-                document.getElementById("active-part-badge").innerText = "PART 3: MATCHING";
-                document.getElementById("quiz-progress-text").innerText = `All ${db.matching.listA.length} Questions`;
+
+            } else if (currentSection === 2) {
+                // ---- MATCHING ----
+                badge.innerText = "🔗 PART 3: MATCHING";
+                progress.innerText = `All ${db.matching.listA.length} pairs`;
 
                 let html = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 space-y-2">
-                            <h4 class="text-xs font-bold text-amber-400 uppercase border-b border-slate-700 pb-2">List A (Terms)</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+                        <div class="bg-slate-900/70 p-3 rounded-xl border border-slate-700 space-y-1.5">
+                            <h4 class="text-xs font-bold text-amber-400 uppercase border-b border-slate-700 pb-1.5">List A (Terms)</h4>
                             ${db.matching.listA.map(t => `<div class="text-xs text-slate-200 py-1">${t}</div>`).join('')}
                         </div>
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 space-y-2">
-                            <h4 class="text-xs font-bold text-emerald-400 uppercase border-b border-slate-700 pb-2">List B (Definitions)</h4>
+                        <div class="bg-slate-900/70 p-3 rounded-xl border border-slate-700 space-y-1.5">
+                            <h4 class="text-xs font-bold text-emerald-400 uppercase border-b border-slate-700 pb-1.5">List B (Definitions)</h4>
                             ${db.matching.listB.map(d => `<div class="text-xs text-slate-300 py-1">${d}</div>`).join('')}
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 border-t border-slate-700 pt-6">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 border-t border-slate-700 pt-5">
                 `;
-                
                 db.matching.listA.forEach((_, idx) => {
                     html += `
-                        <div class="flex flex-col space-y-1">
-                            <label class="text-xs text-slate-400 font-medium">Match ${idx + 1}:</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="text" id="match-${idx}" maxlength="1" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-center text-sm font-bold uppercase focus:outline-none focus:border-amber-500 text-amber-300" placeholder="A-Z">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[10px] text-slate-400 font-medium">Match ${idx+1}:</label>
+                            <div class="flex items-center gap-2">
+                                <input type="text" id="match-${idx}" maxlength="1" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-center text-sm font-bold uppercase focus:outline-none focus:border-amber-500 text-amber-300" placeholder="A-${String.fromCharCode(64+db.matching.listA.length)}" autocomplete="off">
                                 <span id="fb-match-${idx}" class="text-base font-bold hidden"></span>
                             </div>
                         </div>
@@ -326,157 +759,210 @@
                 html += `</div>`;
                 card.innerHTML = html;
 
-                btn.innerText = "Check All Matches";
+                btn.innerText = "✅ Check All Matches";
                 btn.classList.remove("hidden");
                 btn.onclick = () => evaluateMatching();
-            }
-            else if (currentSection === 3) { // Written & SQL
-                document.getElementById("active-part-badge").innerText = "PART 4: WRITTEN & SQL";
-                document.getElementById("quiz-progress-text").innerText = `Final Phase`;
 
-                let html = `<div class="space-y-6">`;
+            } else if (currentSection === 3) {
+                // ---- WRITTEN & SQL ----
+                badge.innerText = "✍️ PART 4: WRITTEN & SQL";
+                progress.innerText = `Final Phase — ${db.written.length} questions`;
+
+                let html = `<div class="space-y-5">`;
                 db.written.forEach((item, idx) => {
                     const isSQL = item.type === 'sql';
                     html += `
-                        <div class="bg-slate-700/20 p-4 rounded-lg border border-slate-700/50">
-                            <p class="text-sm ${isSQL ? 'font-mono text-amber-400' : 'font-medium text-slate-200'} mb-3">${idx + 1}. ${item.q}</p>
-                            <textarea id="written-${idx}" rows="2" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm focus:outline-none focus:border-emerald-500 ${isSQL ? 'font-mono text-emerald-300' : 'text-slate-200'}" placeholder="Type here..."></textarea>
-                            <div id="fb-written-${idx}" class="hidden mt-3 p-3 bg-slate-900 border border-slate-700 rounded-lg text-xs leading-relaxed"></div>
+                        <div class="bg-slate-700/20 p-3 rounded-lg border border-slate-700/50">
+                            <p class="text-sm ${isSQL ? 'font-mono text-amber-400' : 'font-medium text-slate-200'} mb-2">${idx+1}. ${item.q}</p>
+                            <textarea id="written-${idx}" rows="2" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm focus:outline-none focus:border-emerald-500 ${isSQL ? 'font-mono text-emerald-300' : 'text-slate-200'}" placeholder="Type your answer..."></textarea>
+                            <div id="fb-written-${idx}" class="hidden mt-3 p-3 bg-slate-900/80 border border-slate-700 rounded-lg text-xs leading-relaxed"></div>
                         </div>
                     `;
                 });
                 html += `</div>`;
                 card.innerHTML = html;
 
-                btn.innerText = "Check Written & Finish";
+                btn.innerText = "✅ Check Written & Finish";
                 btn.classList.remove("hidden");
                 btn.onclick = () => evaluateWritten();
             }
+
+            updateProgress();
         }
 
-        // --- Evaluators ---
-
+        // ---- MCQ checker ----
         function checkMCQ(btnEl, selected, correct) {
             const btns = document.querySelectorAll(".mcq-btn");
             btns.forEach(b => b.removeAttribute("onclick"));
-
             const fb = document.getElementById("mcq-feedback");
             fb.classList.remove("hidden");
 
             if (selected === correct) {
                 btnEl.classList.add("bg-emerald-900/80", "border-emerald-500");
                 fb.innerHTML = "✅ ڕاستە (Correct)";
-                fb.className = "block text-center text-lg p-3 rounded-xl mt-4 bg-emerald-950 text-emerald-400 font-bold border border-emerald-800";
+                fb.className =
+                "block text-center text-lg p-3 rounded-xl mt-4 bg-emerald-950 text-emerald-400 font-bold border border-emerald-800";
                 totalScore++;
+                sectionScores.mcq++;
             } else {
                 btnEl.classList.add("bg-red-900/80", "border-red-500");
-                fb.innerHTML = `❌ هەڵەیە (Incorrect) - The correct answer is <strong>${correct}</strong>`;
-                fb.className = "block text-center text-lg p-3 rounded-xl mt-4 bg-red-950 text-red-400 font-bold border border-red-800";
-
-                // FIX: reliably find and highlight the correct-answer button
-                // using the data-char attribute instead of fragile innerText matching.
+                fb.innerHTML = `❌ هەڵەیە (Incorrect) — The correct answer is <strong>${correct}</strong>`;
+                fb.className =
+                    "block text-center text-lg p-3 rounded-xl mt-4 bg-red-950 text-red-400 font-bold border border-red-800";
                 btns.forEach(b => {
-                    if (b.getAttribute("data-char") === correct) {
+                    const txt = b.innerText || b.textContent;
+                    if (txt.includes(`\n${correct}`) || txt.includes(` ${correct}\n`) || txt.includes(` ${correct} `)) {
                         b.classList.add("border-emerald-500", "bg-emerald-900/30");
                     }
                 });
             }
             document.getElementById("section-action-btn").classList.remove("hidden");
+            updateProgress();
         }
 
+        // ---- Blanks evaluator ----
         function evaluateBlanks() {
             const items = dbPool[currentLvl].blanks.items;
-            let sectionScore = 0;
-            
+            let secScore = 0;
             items.forEach((item, idx) => {
-                const inputEl = document.getElementById(`blank-${idx}`);
-                const fbEl = document.getElementById(`fb-blank-${idx}`);
-                inputEl.disabled = true;
-                fbEl.classList.remove("hidden");
-
-                if (inputEl.value.trim().toLowerCase() === item.ans.toLowerCase()) {
-                    inputEl.classList.add("border-emerald-500", "bg-emerald-900/20", "text-emerald-400");
-                    fbEl.innerText = "✅";
-                    sectionScore++;
+                const inp = document.getElementById(`blank-${idx}`);
+                const fb = document.getElementById(`fb-blank-${idx}`);
+                inp.disabled = true;
+                fb.classList.remove("hidden");
+                const userAns = inp.value.trim().toLowerCase();
+                const correct = item.ans.toLowerCase();
+                if (userAns === correct) {
+                    inp.classList.add("border-emerald-500", "bg-emerald-900/20", "text-emerald-400");
+                    fb.innerText = "✅";
+                    secScore++;
                 } else {
-                    inputEl.classList.add("border-red-500", "bg-red-900/20");
-                    inputEl.value = `${inputEl.value} (Correct: ${item.ans})`;
-                    fbEl.innerText = "❌";
+                    inp.classList.add("border-red-500", "bg-red-900/20");
+                    inp.value = `${inp.value} (→ ${item.ans})`;
+                    fb.innerText = "❌";
                 }
             });
-            
-            totalScore += sectionScore;
-            
+            totalScore += secScore;
+            sectionScores.blanks = secScore;
+
             const btn = document.getElementById("section-action-btn");
             btn.innerText = "Next Section →";
-            btn.onclick = () => { currentSection++; renderSection(); };
+            btn.onclick = () => { currentSection = 2;
+                renderSection(); };
+            updateProgress();
         }
 
+        // ---- Matching evaluator ----
         function evaluateMatching() {
             const answers = dbPool[currentLvl].matching.answers;
-            let sectionScore = 0;
-
+            let secScore = 0;
             answers.forEach((ans, idx) => {
-                const inputEl = document.getElementById(`match-${idx}`);
-                const fbEl = document.getElementById(`fb-match-${idx}`);
-                inputEl.disabled = true;
-                fbEl.classList.remove("hidden");
-
-                if (inputEl.value.trim().toUpperCase() === ans.toUpperCase()) {
-                    inputEl.classList.add("border-emerald-500", "bg-emerald-900/20", "text-emerald-400");
-                    fbEl.innerText = "✅";
-                    sectionScore++;
+                const inp = document.getElementById(`match-${idx}`);
+                const fb = document.getElementById(`fb-match-${idx}`);
+                inp.disabled = true;
+                fb.classList.remove("hidden");
+                if (inp.value.trim().toUpperCase() === ans.toUpperCase()) {
+                    inp.classList.add("border-emerald-500", "bg-emerald-900/20", "text-emerald-400");
+                    fb.innerText = "✅";
+                    secScore++;
                 } else {
-                    inputEl.classList.add("border-red-500", "bg-red-900/20", "text-red-400");
-                    inputEl.value = `${inputEl.value} -> ${ans}`;
-                    fbEl.innerText = "❌";
+                    inp.classList.add("border-red-500", "bg-red-900/20", "text-red-400");
+                    inp.value = `${inp.value} → ${ans}`;
+                    fb.innerText = "❌";
                 }
             });
-
-            totalScore += sectionScore;
+            totalScore += secScore;
+            sectionScores.matching = secScore;
 
             const btn = document.getElementById("section-action-btn");
             btn.innerText = "Next Section →";
-            btn.onclick = () => { currentSection++; renderSection(); };
+            btn.onclick = () => { currentSection = 3;
+                renderSection(); };
+            updateProgress();
         }
 
+        // ---- Written evaluator ----
         function evaluateWritten() {
             const items = dbPool[currentLvl].written;
+            let secScore = 0;
             items.forEach((item, idx) => {
-                const inputEl = document.getElementById(`written-${idx}`);
-                const fbEl = document.getElementById(`fb-written-${idx}`);
-                inputEl.disabled = true;
-                fbEl.classList.remove("hidden");
-                fbEl.innerHTML = `<span class="text-amber-400 font-bold block mb-1">Official Solution / Keywords:</span> <span class="text-slate-300 font-mono">${item.ans}</span>`;
-                
-                if(inputEl.value.trim().length > 10) totalScore++;
+                const inp = document.getElementById(`written-${idx}`);
+                const fb = document.getElementById(`fb-written-${idx}`);
+                inp.disabled = true;
+                fb.classList.remove("hidden");
+                fb.innerHTML =
+                    `<span class="text-amber-400 font-bold block mb-1">📌 Model Answer / Keywords:</span> <span class="text-slate-300 font-mono text-xs">${item.ans}</span>`;
+                if (inp.value.trim().length > 8) {
+                    secScore++;
+                    fb.innerHTML +=
+                        ` <span class="text-emerald-400 block mt-2 text-xs">✅ You provided a reasonable answer.</span>`;
+                } else {
+                    fb.innerHTML +=
+                        ` <span class="text-red-400 block mt-2 text-xs">⚠️ Short answer — try to be more detailed.</span>`;
+                }
             });
+            totalScore += secScore;
+            sectionScores.written = secScore;
 
             const btn = document.getElementById("section-action-btn");
-            btn.innerText = "View Final Score";
+            btn.innerText = "🏁 View Final Score";
             btn.onclick = () => finishLevel();
+            updateProgress();
         }
 
+        // ---- Finish ----
         function finishLevel() {
-            const percentage = Math.round((totalScore / totalWeights) * 100);
-            
+            const percentage = Math.min(100, Math.round((totalScore / totalPossible) * 100));
+
             document.getElementById("quiz-screen").classList.add("hidden");
             document.getElementById("result-screen").classList.remove("hidden");
             document.getElementById("level-final-score").innerText = percentage;
-            
-            document.getElementById(`status-l${currentLvl}`).innerText = `Completed: ${percentage}%`;
-            document.getElementById(`status-l${currentLvl}`).classList.add("text-emerald-400", "font-bold");
-            
-            let global = parseInt(document.getElementById("global-score").innerText) || 0;
-            document.getElementById("global-score").innerText = global + percentage;
+            document.getElementById("result-detail").innerHTML =
+                `${totalScore} / ${totalPossible} correct · MCQ: ${sectionScores.mcq}, Blanks: ${sectionScores.blanks}, Matching: ${sectionScores.matching}, Written: ${sectionScores.written}`;
+
+            // Update dashboard status
+            const statusEl = document.getElementById(`status-l${currentLvl}`);
+            statusEl.innerText = `✅ Completed: ${percentage}%`;
+            statusEl.className = "mt-4 text-xs text-emerald-400 font-bold";
+
+            // Update global score (accumulate)
+            const globalEl = document.getElementById("global-score");
+            const currentGlobal = parseInt(globalEl.innerText) || 0;
+            // We store cumulative percentage; better to sum raw scores
+            // We'll just store the percentage as a cumulative metric
+            // Actually let's just add the percentage to global
+            globalEl.innerText = currentGlobal + percentage;
         }
 
+        // ---- Exit ----
         function exitToMenu() {
             document.getElementById("quiz-screen").classList.add("hidden");
             document.getElementById("result-screen").classList.add("hidden");
             document.getElementById("dashboard-screen").classList.remove("hidden");
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         }
+
+        // ---- Progress bar ----
+        function updateProgress() {
+            const db = dbPool[currentLvl];
+            let total = db.mcqs.length + db.blanks.items.length + db.matching.listA.length + db.written.length;
+            let done = 0;
+            if (currentSection === 0) done = mcqIndex;
+            else if (currentSection === 1) done = db.mcqs.length;
+            else if (currentSection === 2) done = db.mcqs.length + db.blanks.items.length;
+            else if (currentSection === 3) done = db.mcqs.length + db.blanks.items.length + db.matching.listA.length;
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+            document.getElementById("progress-bar").style.width = Math.min(100, pct) + "%";
+        }
+
+        // ---- init dashboard status ----
+        document.addEventListener('DOMContentLoaded', function() {
+            // show initial statuses
+            for (let lvl of [1, 2, 3]) {
+                const el = document.getElementById(`status-l${lvl}`);
+                if (el) el.innerText = "⚪ Not Started";
+            }
+        });
     </script>
+
 </body>
 </html>
