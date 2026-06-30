@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DBAS Exam Master System v3</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>DBAS Exam Master System v4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Poppins', sans-serif; }
@@ -33,7 +33,7 @@
                 <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col justify-between hover:border-emerald-500 transition shadow-lg cursor-pointer" onclick="startLevel(1)">
                     <div>
                         <span class="text-xs font-semibold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded">Level 1</span>
-                        <h3 class="text-lg font-bold text-white mt-3">Exact Exam Copy</h3>
+                        <h3 class="text-lg font-bold text-white mt-3">Final Exam Copy</h3>
                     </div>
                     <div class="mt-4 text-xs text-slate-500" id="status-l1">Status: Not Started</div>
                 </div>
@@ -41,7 +41,7 @@
                 <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col justify-between hover:border-blue-500 transition shadow-lg cursor-pointer" onclick="startLevel(2)">
                     <div>
                         <span class="text-xs font-semibold uppercase tracking-wider bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded">Level 2</span>
-                        <h3 class="text-lg font-bold text-white mt-3">2X Challenge (Double)</h3>
+                        <h3 class="text-lg font-bold text-white mt-3">Midterm Focus</h3>
                     </div>
                     <div class="mt-4 text-xs text-slate-500" id="status-l2">Status: Not Started</div>
                 </div>
@@ -49,7 +49,7 @@
                 <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col justify-between hover:border-purple-500 transition shadow-lg cursor-pointer" onclick="startLevel(3)">
                     <div>
                         <span class="text-xs font-semibold uppercase tracking-wider bg-purple-500/10 text-purple-400 px-2.5 py-1 rounded">Level 3</span>
-                        <h3 class="text-lg font-bold text-white mt-3">3X Ultra Master</h3>
+                        <h3 class="text-lg font-bold text-white mt-3">Advanced DBAS</h3>
                     </div>
                     <div class="mt-4 text-xs text-slate-500" id="status-l3">Status: Not Started</div>
                 </div>
@@ -83,9 +83,9 @@
     </main>
 
     <script>
-        // Database Structure Organized by Sections
+        // Database Structure - fully populated with real questions
         const dbPool = {
-            1: {
+            1: { // Final Exam Based
                 mcqs: [
                     { q: "Which database language is primarily used to retrieve data from a database?", opts: ["DDL", "DML", "DCL", "TCL"], ans: "B" },
                     { q: "Which database administrator responsibility focuses on ensuring authorized users access while preventing breach?", opts: ["Security Management", "Storage Management", "Capacity Planning", "Data Modeling"], ans: "A" },
@@ -122,50 +122,80 @@
                         "D. A virtual table based on the result of a query.",
                         "E. A structure used to improve data retrieval speed."
                     ],
-                    answers: ["B", "C", "E", "D", "A"] // Corresponding answers for 1, 2, 3, 4, 5
+                    answers: ["B", "C", "E", "D", "A"] 
                 },
                 written: [
                     { type: 'text', q: "List the 4 core ACID properties of a database transaction:", ans: "Atomicity, Consistency, Isolation, Durability" },
                     { type: 'sql', q: "Write an SQL query to display all columns from 'employees' where name ends with 'n', department is 'HR' or 'Finance', and salary is between 1000 and 3000.", ans: "SELECT * FROM employees WHERE name LIKE '%n' AND department IN ('HR', 'Finance') AND salary BETWEEN 1000 AND 3000;" }
                 ]
             },
-            2: { mcqs: [], blanks: { bank: [], items: [] }, matching: { listA: [], listB: [], answers: [] }, written: [] },
-            3: { mcqs: [], blanks: { bank: [], items: [] }, matching: { listA: [], listB: [], answers: [] }, written: [] }
+            2: { // Midterm Based & Core DBAS
+                mcqs: [
+                    { q: "Which transaction property ensures 'all or nothing' behavior?", opts: ["Isolation", "Durability", "Atomicity", "Consistency"], ans: "C" },
+                    { q: "In a Deadlock, if Transaction 1 holds Resource 1 and waits for Resource 2, what must Transaction 2 do to cause a stalemate?", opts: ["Release Resource 1", "Hold Resource 2 and wait for Resource 1", "Commit immediately", "Rollback"], ans: "B" },
+                    { q: "Which ACID property ensures that the data survives any system failures?", opts: ["Atomicity", "Consistency", "Isolation", "Durability"], ans: "D" },
+                    { q: "What is required to achieve Isolation in concurrent transactions?", opts: ["A locking mechanism", "A backup drive", "A foreign key", "A database view"], ans: "A" },
+                    { q: "Which SQL feature is used to evaluate conditions like 'WHEN Score >= 90 THEN Excellent'?", opts: ["IF-ELSE", "CASE", "SWITCH", "LOOP"], ans: "B" },
+                    { q: "What defines Data Consistency in a transaction?", opts: ["Data is correct both before and after execution", "Data is backed up", "Data is readable by everyone", "Data is isolated"], ans: "A" }
+                ],
+                blanks: {
+                    bank: ["deadlock", "isolation", "subquery", "commit", "uncommitted"],
+                    items: [
+                        { q: "A ________ is a situation where two or more transactions are blocked indefinitely waiting for resources.", ans: "deadlock" },
+                        { q: "No concurrent transaction has visibility to ________ database modifications made by other transactions.", ans: "uncommitted" },
+                        { q: "________ means that it appears the system is running only a single transaction at a time.", ans: "isolation" },
+                        { q: "A query nested inside another query (e.g., inside a WHERE clause) is known as a ________.", ans: "subquery" }
+                    ]
+                },
+                matching: {
+                    listA: ["1. Atomicity", "2. Consistency", "3. Isolation", "4. Durability"],
+                    listB: [
+                        "A. Data is in a correct state before and after.",
+                        "B. Ensures 'all or nothing' execution.",
+                        "C. Survives system outages and crashes.",
+                        "D. Concurrent operations do not interfere."
+                    ],
+                    answers: ["B", "A", "D", "C"] 
+                },
+                written: [
+                    { type: 'text', q: "Define Deadlock based on the midterm notes:", ans: "A situation where two or more transactions are blocked indefinitely, each waiting for another to release a resource it needs (circular waiting)." },
+                    { type: 'sql', q: "Write an SQL query to select student_id and payment_amount from 'payments' where payment_amount is greater than the average payment_amount.", ans: "SELECT student_id, payment_amount FROM payments WHERE payment_amount > (SELECT AVG(payment_amount) FROM payments);" }
+                ]
+            },
+            3: { // Advanced Challenge
+                mcqs: [
+                    { q: "Which normal form requires that there are no transitive dependencies?", opts: ["1NF", "2NF", "3NF", "BCNF"], ans: "C" },
+                    { q: "In Two-Phase Locking (2PL), what happens during the 'shrinking phase'?", opts: ["Locks are acquired", "Locks are released", "Data is read", "Data is written"], ans: "B" },
+                    { q: "What does WAL stand for in database recovery?", opts: ["Write-Ahead Logging", "Wait-And-Lock", "Where-And-Limit", "Wide-Area-Link"], ans: "A" },
+                    { q: "Which SQL command is used to give a user permission to access a database object?", opts: ["ALLOW", "PERMIT", "GRANT", "GIVE"], ans: "C" },
+                    { q: "A Phantom Read occurs when:", opts: ["A transaction reads uncommitted data", "A row is modified by another transaction", "New rows are added by another transaction matching the query", "Data is lost completely"], ans: "C" }
+                ],
+                blanks: {
+                    bank: ["savepoint", "revoke", "bcnf", "redo", "undo"],
+                    items: [
+                        { q: "A ________ sets a point within a transaction to which you can later roll back.", ans: "savepoint" },
+                        { q: "The SQL command to remove user permissions is ________.", ans: "revoke" },
+                        { q: "Boyce-Codd Normal Form is often abbreviated as ________.", ans: "bcnf" },
+                        { q: "During recovery, committed transactions are applied again using the ________ operation.", ans: "redo" },
+                        { q: "Uncommitted transactions are reversed during recovery using the ________ operation.", ans: "undo" }
+                    ]
+                },
+                matching: {
+                    listA: ["1. DDL", "2. DML", "3. DCL", "4. TCL"],
+                    listB: [
+                        "A. GRANT, REVOKE",
+                        "B. COMMIT, ROLLBACK",
+                        "C. CREATE, ALTER, DROP",
+                        "D. SELECT, INSERT, UPDATE"
+                    ],
+                    answers: ["C", "D", "A", "B"] 
+                },
+                written: [
+                    { type: 'text', q: "Explain the difference between a Shared Lock and an Exclusive Lock:", ans: "Shared lock allows multiple transactions to read data but not modify it. Exclusive lock restricts all other transactions from reading or modifying the data." },
+                    { type: 'sql', q: "Write an SQL query to group employees by 'department' and show only departments with more than 5 employees.", ans: "SELECT department, COUNT(*) FROM employees GROUP BY department HAVING COUNT(*) > 5;" }
+                ]
+            }
         };
-
-        // Hydrate Level 2 (2X) & Level 3 (3X) completely
-        for(let i=1; i<=20; i++) dbPool[2].mcqs.push({ q: `L2 MCQ #${i}: Advanced Database Architecture test?`, opts: [`Option A ${i}`, `Correct Ans ${i}`, `Option C ${i}`, `Option D ${i}`], ans: "B" });
-        dbPool[2].blanks.bank = ["2nf","cascade","join","shared","isolation","atomicity","index","trigger","commit","buffer","metadata","schema","view","table","sql","lock","wait","die","wound","log","recovery"];
-        for(let i=1; i<=20; i++) dbPool[2].blanks.items.push({ q: `To prevent anomaly #${i}, databases enforce ________ normal form.`, ans: "2nf" });
-        for(let i=1; i<=10; i++) {
-            dbPool[2].matching.listA.push(`${i}. L2 Term ${i}`);
-            dbPool[2].matching.listB.push(`${String.fromCharCode(64+i)}. L2 Definition for element ${i}`);
-            dbPool[2].matching.answers.push(String.fromCharCode(64+i));
-        }
-        dbPool[2].written = [
-            { type: 'text', q: "Define Deadlock briefly:", ans: "Circular wait condition" },
-            { type: 'text', q: "What is WAL?", ans: "Write-Ahead Logging" },
-            { type: 'sql', q: "Query to select id where amount > 500", ans: "SELECT id FROM payments WHERE amount > 500;" },
-            { type: 'sql', q: "Group by department having count > 10", ans: "SELECT dept FROM emp GROUP BY dept HAVING count(*) > 10;" }
-        ];
-
-        // Hydrate Level 3 (3X)
-        for(let i=1; i<=30; i++) dbPool[3].mcqs.push({ q: `L3 Expert MCQ #${i}: Deep Engine Configuration?`, opts: [`Option A`, `Option B`, `Correct Ans`, `Option D`], ans: "C" });
-        dbPool[3].blanks.bank = ["serializable","bcnf","lock","recovery","atomic","foreign","primary","check","unique","default","insert","update","delete","truncate","drop","grant","revoke","commit","rollback","savepoint","timestamp","2pl","optimistic","pessimistic","wal","log","checkpoint","redo","undo","buffer","cache"];
-        for(let i=1; i<=30; i++) dbPool[3].blanks.items.push({ q: `The absolute highest transaction isolation state standard level is ________. (${i})`, ans: "serializable" });
-        for(let i=1; i<=15; i++) {
-            dbPool[3].matching.listA.push(`${i}. L3 Advanced Term ${i}`);
-            dbPool[3].matching.listB.push(`${String.fromCharCode(64+i)}. L3 Complex Definition ${i}`);
-            dbPool[3].matching.answers.push(String.fromCharCode(64+i));
-        }
-        dbPool[3].written = [
-            { type: 'text', q: "Difference between 3NF and BCNF:", ans: "functional dependency rules" },
-            { type: 'text', q: "Two-Phase Locking (2PL) protocol:", ans: "growing and shrinking" },
-            { type: 'text', q: "Define Phantom Read:", ans: "reading new rows added by uncommitted transactions" },
-            { type: 'sql', q: "Update employee salary to 5000 where id=99:", ans: "UPDATE employees SET salary = 5000 WHERE id = 99;" },
-            { type: 'sql', q: "Delete from logs where timestamp < 2025:", ans: "DELETE FROM logs WHERE timestamp < '2025-01-01';" },
-            { type: 'sql', q: "Select users ordered by name:", ans: "SELECT name FROM users ORDER BY name ASC;" }
-        ];
 
         // State variables
         let currentLvl = 1;
@@ -277,7 +307,7 @@
                         <div class="flex flex-col space-y-1">
                             <label class="text-xs text-slate-400 font-medium">Match ${idx + 1}:</label>
                             <div class="flex items-center space-x-2">
-                                <input type="text" id="match-${idx}" maxlength="1" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-center text-sm font-bold uppercase focus:outline-none focus:border-amber-500 text-amber-300" placeholder="A-E">
+                                <input type="text" id="match-${idx}" maxlength="1" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-center text-sm font-bold uppercase focus:outline-none focus:border-amber-500 text-amber-300" placeholder="A-Z">
                                 <span id="fb-match-${idx}" class="text-base font-bold hidden"></span>
                             </div>
                         </div>
@@ -317,7 +347,6 @@
         // --- Evaluators ---
 
         function checkMCQ(btnEl, selected, correct) {
-            // Disable buttons immediately
             const btns = document.querySelectorAll(".mcq-btn");
             btns.forEach(b => b.removeAttribute("onclick"));
 
@@ -333,9 +362,8 @@
                 btnEl.classList.add("bg-red-900/80", "border-red-500");
                 fb.innerHTML = `❌ هەڵەیە (Incorrect) - The correct answer is <strong>${correct}</strong>`;
                 fb.className = "block text-center text-lg p-3 rounded-xl mt-4 bg-red-950 text-red-400 font-bold border border-red-800";
-                // Highlight correct option
                 btns.forEach(b => {
-                    if (b.innerText.includes(`\n${correct}`) || b.innerText.includes(` ${correct}\n`)) { // Hacky way to find correct btn
+                    if (b.innerText.includes(`\n${correct}`) || b.innerText.includes(` ${correct}\n`)) { 
                         b.classList.add("border-emerald-500", "bg-emerald-900/30");
                     }
                 });
@@ -408,7 +436,6 @@
                 fbEl.classList.remove("hidden");
                 fbEl.innerHTML = `<span class="text-amber-400 font-bold block mb-1">Official Solution / Keywords:</span> <span class="text-slate-300 font-mono">${item.ans}</span>`;
                 
-                // Simple auto-grade: if user wrote something decent, give a point.
                 if(inputEl.value.trim().length > 10) totalScore++;
             });
 
@@ -424,11 +451,9 @@
             document.getElementById("result-screen").classList.remove("hidden");
             document.getElementById("level-final-score").innerText = percentage;
             
-            // Update Dashboard Stats
             document.getElementById(`status-l${currentLvl}`).innerText = `Completed: ${percentage}%`;
             document.getElementById(`status-l${currentLvl}`).classList.add("text-emerald-400", "font-bold");
             
-            // Just sum up percentages for a quick global score metric
             let global = parseInt(document.getElementById("global-score").innerText) || 0;
             document.getElementById("global-score").innerText = global + percentage;
         }
