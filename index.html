@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBAS Exam Master System v3</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <header class="bg-slate-800 border-b border-slate-700 p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold text-emerald-400">DBAS Advanced Trainer</h1>
+            <div class="text-sm bg-slate-700 px-3 py-1 rounded-full text-slate-300">
+                Score: <span id="global-score" class="font-bold text-emerald-400">0</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl w-full mx-auto p-4 flex-grow flex flex-col">
+        
+        <div id="dashboard-screen" class="space-y-6 py-6 w-full">
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 text-center shadow-xl">
+                <h2 class="text-2xl font-bold text-white mb-2">ئامادەکاری بۆ فاینەڵ و میدتێرم</h2>
+                <p class="text-slate-400 text-sm">بەپێی سیستەمی نوێ: هەڵبژاردنەکان یەک بە یەک، بۆشایی و گەیاندنەکان هەمووی بەیەکەوە.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col justify-between hover:border-emerald-500 transition shadow-lg cursor-pointer" onclick="startLevel(1)">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded">Level 1</span>
+                        <h3 class="text-lg font-bold text-white mt-3">Exact Exam Copy</h3>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-500" id="status-l1">Status: Not Started</div>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col justify-between hover:border-blue-500 transition shadow-lg cursor-pointer" onclick="startLevel(2)">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded">Level 2</span>
+                        <h3 class="text-lg font-bold text-white mt-3">2X Challenge (Double)</h3>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-500" id="status-l2">Status: Not Started</div>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col justify-between hover:border-purple-500 transition shadow-lg cursor-pointer" onclick="startLevel(3)">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider bg-purple-500/10 text-purple-400 px-2.5 py-1 rounded">Level 3</span>
+                        <h3 class="text-lg font-bold text-white mt-3">3X Ultra Master</h3>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-500" id="status-l3">Status: Not Started</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz-screen" class="hidden w-full space-y-4 py-4">
+            <div class="flex justify-between items-center bg-slate-800 p-3 rounded-xl border border-slate-700 shadow-sm">
+                <div>
+                    <span id="active-part-badge" class="text-xs font-bold text-emerald-400 block">PART 1: MCQs</span>
+                    <span id="quiz-progress-text" class="text-xs text-slate-400">Question 1 of 10</span>
+                </div>
+                <button onclick="exitToMenu()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg transition">Exit</button>
+            </div>
+
+            <div id="question-card" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4"></div>
+
+            <button id="section-action-btn" class="hidden w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-md"></button>
+        </div>
+
+        <div id="result-screen" class="hidden text-center space-y-6 py-10 max-w-md mx-auto w-full">
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-2xl">
+                <h2 class="text-3xl font-bold text-white mb-2">تەواو بوو!</h2>
+                <div class="my-6">
+                    <span id="level-final-score" class="text-6xl font-extrabold text-emerald-400">0</span>
+                    <span class="text-slate-500 text-lg">%</span>
+                </div>
+                <button onclick="exitToMenu()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 rounded-lg transition">Return to Menu</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Database Structure Organized by Sections
+        const dbPool = {
+            1: {
+                mcqs: [
+                    { q: "Which database language is primarily used to retrieve data from a database?", opts: ["DDL", "DML", "DCL", "TCL"], ans: "B" },
+                    { q: "Which database administrator responsibility focuses on ensuring authorized users access while preventing breach?", opts: ["Security Management", "Storage Management", "Capacity Planning", "Data Modeling"], ans: "A" },
+                    { q: "The process of organizing data to reduce redundancy and improve integrity is called:", opts: ["Replication", "Normalization", "Optimization", "Backup"], ans: "B" },
+                    { q: "Which relational database concept ensures that every row can be uniquely identified?", opts: ["Foreign Key", "Candidate Key", "Primary Key", "Composite Key"], ans: "C" },
+                    { q: "Which SQL command permanently removes all rows keeping table structure?", opts: ["DELETE", "DROP", "REMOVE", "TRUNCATE"], ans: "D" },
+                    { q: "Which database object is used to speed up data retrieval operations?", opts: ["Trigger", "View", "Index", "Cursor"], ans: "C" },
+                    { q: "A transaction that satisfies the ACID properties guarantees:", opts: ["Faster query execution", "Data consistency and reliability", "Smaller size", "Automatic backup"], ans: "B" },
+                    { q: "Which of the following is considered a database security threat?", opts: ["Normalization", "SQL Injection", "Indexing", "Data Modeling"], ans: "B" },
+                    { q: "In concurrency control, a lock allowing multiple transactions to read simultaneously is:", opts: ["Exclusive Lock", "Shared Lock", "Update Lock", "Deadlock"], ans: "B" },
+                    { q: "Which deadlock handling method detects and resolves them post-occurrence?", opts: ["Prevention", "Avoidance", "Detection and Recovery", "Timestamping"], ans: "C" }
+                ],
+                blanks: {
+                    bank: ["integrity","view","index","backup","trigger","exclusive","normalization","entity","foreign","rollback","recovery"],
+                    items: [
+                        { q: "Database ________ ensures data remains accurate and consistent.", ans: "integrity" },
+                        { q: "A database ________ is a logical representation of data from one or more tables.", ans: "view" },
+                        { q: "An ________ is used to improve query performance.", ans: "index" },
+                        { q: "A ________ is used to restore data after failure.", ans: "backup" },
+                        { q: "A ________ automatically executes when specific database events occur.", ans: "trigger" },
+                        { q: "An ________ lock prevents other transactions from reading or modifying data.", ans: "exclusive" },
+                        { q: "________ is the process of minimizing redundancy in a database.", ans: "normalization" },
+                        { q: "An ________ represents a real-world object in ER modeling.", ans: "entity" },
+                        { q: "A ________ Key links records between two tables.", ans: "foreign" },
+                        { q: "A ________ operation undoes changes made during a transaction.", ans: "rollback" }
+                    ]
+                },
+                matching: {
+                    listA: ["1. Primary Key", "2. Foreign Key", "3. Index", "4. View", "5. Trigger"],
+                    listB: [
+                        "A. A database object that automatically executes in response to specific events.",
+                        "B. A field that uniquely identifies each record in a table.",
+                        "C. A field that references a primary key in another table.",
+                        "D. A virtual table based on the result of a query.",
+                        "E. A structure used to improve data retrieval speed."
+                    ],
+                    answers: ["B", "C", "E", "D", "A"] // Corresponding answers for 1, 2, 3, 4, 5
+                },
+                written: [
+                    { type: 'text', q: "List the 4 core ACID properties of a database transaction:", ans: "Atomicity, Consistency, Isolation, Durability" },
+                    { type: 'sql', q: "Write an SQL query to display all columns from 'employees' where name ends with 'n', department is 'HR' or 'Finance', and salary is between 1000 and 3000.", ans: "SELECT * FROM employees WHERE name LIKE '%n' AND department IN ('HR', 'Finance') AND salary BETWEEN 1000 AND 3000;" }
+                ]
+            },
+            2: { mcqs: [], blanks: { bank: [], items: [] }, matching: { listA: [], listB: [], answers: [] }, written: [] },
+            3: { mcqs: [], blanks: { bank: [], items: [] }, matching: { listA: [], listB: [], answers: [] }, written: [] }
+        };
+
+        // Hydrate Level 2 (2X) & Level 3 (3X) completely
+        for(let i=1; i<=20; i++) dbPool[2].mcqs.push({ q: `L2 MCQ #${i}: Advanced Database Architecture test?`, opts: [`Option A ${i}`, `Correct Ans ${i}`, `Option C ${i}`, `Option D ${i}`], ans: "B" });
+        dbPool[2].blanks.bank = ["2nf","cascade","join","shared","isolation","atomicity","index","trigger","commit","buffer","metadata","schema","view","table","sql","lock","wait","die","wound","log","recovery"];
+        for(let i=1; i<=20; i++) dbPool[2].blanks.items.push({ q: `To prevent anomaly #${i}, databases enforce ________ normal form.`, ans: "2nf" });
+        for(let i=1; i<=10; i++) {
+            dbPool[2].matching.listA.push(`${i}. L2 Term ${i}`);
+            dbPool[2].matching.listB.push(`${String.fromCharCode(64+i)}. L2 Definition for element ${i}`);
+            dbPool[2].matching.answers.push(String.fromCharCode(64+i));
+        }
+        dbPool[2].written = [
+            { type: 'text', q: "Define Deadlock briefly:", ans: "Circular wait condition" },
+            { type: 'text', q: "What is WAL?", ans: "Write-Ahead Logging" },
+            { type: 'sql', q: "Query to select id where amount > 500", ans: "SELECT id FROM payments WHERE amount > 500;" },
+            { type: 'sql', q: "Group by department having count > 10", ans: "SELECT dept FROM emp GROUP BY dept HAVING count(*) > 10;" }
+        ];
+
+        // Hydrate Level 3 (3X)
+        for(let i=1; i<=30; i++) dbPool[3].mcqs.push({ q: `L3 Expert MCQ #${i}: Deep Engine Configuration?`, opts: [`Option A`, `Option B`, `Correct Ans`, `Option D`], ans: "C" });
+        dbPool[3].blanks.bank = ["serializable","bcnf","lock","recovery","atomic","foreign","primary","check","unique","default","insert","update","delete","truncate","drop","grant","revoke","commit","rollback","savepoint","timestamp","2pl","optimistic","pessimistic","wal","log","checkpoint","redo","undo","buffer","cache"];
+        for(let i=1; i<=30; i++) dbPool[3].blanks.items.push({ q: `The absolute highest transaction isolation state standard level is ________. (${i})`, ans: "serializable" });
+        for(let i=1; i<=15; i++) {
+            dbPool[3].matching.listA.push(`${i}. L3 Advanced Term ${i}`);
+            dbPool[3].matching.listB.push(`${String.fromCharCode(64+i)}. L3 Complex Definition ${i}`);
+            dbPool[3].matching.answers.push(String.fromCharCode(64+i));
+        }
+        dbPool[3].written = [
+            { type: 'text', q: "Difference between 3NF and BCNF:", ans: "functional dependency rules" },
+            { type: 'text', q: "Two-Phase Locking (2PL) protocol:", ans: "growing and shrinking" },
+            { type: 'text', q: "Define Phantom Read:", ans: "reading new rows added by uncommitted transactions" },
+            { type: 'sql', q: "Update employee salary to 5000 where id=99:", ans: "UPDATE employees SET salary = 5000 WHERE id = 99;" },
+            { type: 'sql', q: "Delete from logs where timestamp < 2025:", ans: "DELETE FROM logs WHERE timestamp < '2025-01-01';" },
+            { type: 'sql', q: "Select users ordered by name:", ans: "SELECT name FROM users ORDER BY name ASC;" }
+        ];
+
+        // State variables
+        let currentLvl = 1;
+        let currentSection = 0; // 0=MCQ, 1=Blanks, 2=Matching, 3=Written
+        let mcqIndex = 0;
+        let totalScore = 0;
+        let totalWeights = 0;
+
+        function startLevel(lvl) {
+            currentLvl = lvl;
+            currentSection = 0;
+            mcqIndex = 0;
+            totalScore = 0;
+            
+            // Calculate total items to weight the score out of 100
+            const db = dbPool[lvl];
+            totalWeights = db.mcqs.length + db.blanks.items.length + db.matching.listA.length + db.written.length;
+
+            document.getElementById("dashboard-screen").classList.add("hidden");
+            document.getElementById("quiz-screen").classList.remove("hidden");
+            
+            renderSection();
+        }
+
+        function renderSection() {
+            const db = dbPool[currentLvl];
+            const card = document.getElementById("question-card");
+            const btn = document.getElementById("section-action-btn");
+            card.innerHTML = "";
+            btn.classList.add("hidden");
+
+            if (currentSection === 0) { // MCQs (Step-by-step)
+                document.getElementById("active-part-badge").innerText = "PART 1: MULTIPLE CHOICE";
+                document.getElementById("quiz-progress-text").innerText = `Question ${mcqIndex + 1} of ${db.mcqs.length}`;
+                
+                const item = db.mcqs[mcqIndex];
+                let html = `<p class="text-[15px] font-medium text-slate-100">${item.q}</p><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">`;
+                item.opts.forEach((opt, idx) => {
+                    const char = String.fromCharCode(65 + idx);
+                    html += `
+                        <button onclick="checkMCQ(this, '${char}', '${item.ans}')" class="mcq-btn text-left bg-slate-700/50 hover:bg-slate-700 p-3 rounded-xl border border-slate-600 text-sm transition flex items-center space-x-3">
+                            <span class="font-bold bg-slate-800 text-slate-400 px-2.5 py-1 rounded text-xs">${char}</span>
+                            <span class="text-slate-200">${opt}</span>
+                        </button>
+                    `;
+                });
+                html += `</div><div id="mcq-feedback" class="hidden text-center text-lg p-3 rounded-xl mt-4"></div>`;
+                card.innerHTML = html;
+
+                btn.innerText = "Next MCQ →";
+                btn.onclick = () => {
+                    mcqIndex++;
+                    if (mcqIndex < db.mcqs.length) renderSection();
+                    else { currentSection++; renderSection(); }
+                };
+            } 
+            else if (currentSection === 1) { // Blanks (All at once)
+                document.getElementById("active-part-badge").innerText = "PART 2: FILL IN THE BLANKS";
+                document.getElementById("quiz-progress-text").innerText = `All ${db.blanks.items.length} Questions`;
+                
+                let html = `
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 mb-6 sticky top-16 z-40">
+                        <span class="text-xs uppercase font-bold text-amber-400 block mb-2">🔠 Word Bank (بانکی وشەکان)</span>
+                        <div class="flex flex-wrap gap-2 text-xs text-emerald-300 font-mono">
+                            ${db.blanks.bank.map(w => `<span class="bg-slate-800 px-2 py-1 rounded border border-slate-700">${w}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="space-y-5">
+                `;
+                
+                db.blanks.items.forEach((item, idx) => {
+                    html += `
+                        <div class="bg-slate-700/20 p-4 rounded-lg border border-slate-700/50">
+                            <p class="text-sm font-medium leading-relaxed mb-3">${idx + 1}. ${item.q}</p>
+                            <div class="flex items-center space-x-3">
+                                <input type="text" id="blank-${idx}" class="flex-grow bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm focus:outline-none focus:border-amber-500 text-amber-300" placeholder="Type answer...">
+                                <span id="fb-blank-${idx}" class="text-lg font-bold w-8 text-center hidden"></span>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                card.innerHTML = html;
+
+                btn.innerText = "Check All Blanks";
+                btn.classList.remove("hidden");
+                btn.onclick = () => evaluateBlanks();
+            }
+            else if (currentSection === 2) { // Matching (All at once)
+                document.getElementById("active-part-badge").innerText = "PART 3: MATCHING";
+                document.getElementById("quiz-progress-text").innerText = `All ${db.matching.listA.length} Questions`;
+
+                let html = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 space-y-2">
+                            <h4 class="text-xs font-bold text-amber-400 uppercase border-b border-slate-700 pb-2">List A (Terms)</h4>
+                            ${db.matching.listA.map(t => `<div class="text-xs text-slate-200 py-1">${t}</div>`).join('')}
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 space-y-2">
+                            <h4 class="text-xs font-bold text-emerald-400 uppercase border-b border-slate-700 pb-2">List B (Definitions)</h4>
+                            ${db.matching.listB.map(d => `<div class="text-xs text-slate-300 py-1">${d}</div>`).join('')}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 border-t border-slate-700 pt-6">
+                `;
+                
+                db.matching.listA.forEach((_, idx) => {
+                    html += `
+                        <div class="flex flex-col space-y-1">
+                            <label class="text-xs text-slate-400 font-medium">Match ${idx + 1}:</label>
+                            <div class="flex items-center space-x-2">
+                                <input type="text" id="match-${idx}" maxlength="1" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-center text-sm font-bold uppercase focus:outline-none focus:border-amber-500 text-amber-300" placeholder="A-E">
+                                <span id="fb-match-${idx}" class="text-base font-bold hidden"></span>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                card.innerHTML = html;
+
+                btn.innerText = "Check All Matches";
+                btn.classList.remove("hidden");
+                btn.onclick = () => evaluateMatching();
+            }
+            else if (currentSection === 3) { // Written & SQL
+                document.getElementById("active-part-badge").innerText = "PART 4: WRITTEN & SQL";
+                document.getElementById("quiz-progress-text").innerText = `Final Phase`;
+
+                let html = `<div class="space-y-6">`;
+                db.written.forEach((item, idx) => {
+                    const isSQL = item.type === 'sql';
+                    html += `
+                        <div class="bg-slate-700/20 p-4 rounded-lg border border-slate-700/50">
+                            <p class="text-sm ${isSQL ? 'font-mono text-amber-400' : 'font-medium text-slate-200'} mb-3">${idx + 1}. ${item.q}</p>
+                            <textarea id="written-${idx}" rows="2" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm focus:outline-none focus:border-emerald-500 ${isSQL ? 'font-mono text-emerald-300' : 'text-slate-200'}" placeholder="Type here..."></textarea>
+                            <div id="fb-written-${idx}" class="hidden mt-3 p-3 bg-slate-900 border border-slate-700 rounded-lg text-xs leading-relaxed"></div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                card.innerHTML = html;
+
+                btn.innerText = "Check Written & Finish";
+                btn.classList.remove("hidden");
+                btn.onclick = () => evaluateWritten();
+            }
+        }
+
+        // --- Evaluators ---
+
+        function checkMCQ(btnEl, selected, correct) {
+            // Disable buttons immediately
+            const btns = document.querySelectorAll(".mcq-btn");
+            btns.forEach(b => b.removeAttribute("onclick"));
+
+            const fb = document.getElementById("mcq-feedback");
+            fb.classList.remove("hidden");
+
+            if (selected === correct) {
+                btnEl.classList.add("bg-emerald-900/80", "border-emerald-500");
+                fb.innerHTML = "✅ ڕاستە (Correct)";
+                fb.className = "block text-center text-lg p-3 rounded-xl mt-4 bg-emerald-950 text-emerald-400 font-bold border border-emerald-800";
+                totalScore++;
+            } else {
+                btnEl.classList.add("bg-red-900/80", "border-red-500");
+                fb.innerHTML = `❌ هەڵەیە (Incorrect) - The correct answer is <strong>${correct}</strong>`;
+                fb.className = "block text-center text-lg p-3 rounded-xl mt-4 bg-red-950 text-red-400 font-bold border border-red-800";
+                // Highlight correct option
+                btns.forEach(b => {
+                    if (b.innerText.includes(`\n${correct}`) || b.innerText.includes(` ${correct}\n`)) { // Hacky way to find correct btn
+                        b.classList.add("border-emerald-500", "bg-emerald-900/30");
+                    }
+                });
+            }
+            document.getElementById("section-action-btn").classList.remove("hidden");
+        }
+
+        function evaluateBlanks() {
+            const items = dbPool[currentLvl].blanks.items;
+            let sectionScore = 0;
+            
+            items.forEach((item, idx) => {
+                const inputEl = document.getElementById(`blank-${idx}`);
+                const fbEl = document.getElementById(`fb-blank-${idx}`);
+                inputEl.disabled = true;
+                fbEl.classList.remove("hidden");
+
+                if (inputEl.value.trim().toLowerCase() === item.ans.toLowerCase()) {
+                    inputEl.classList.add("border-emerald-500", "bg-emerald-900/20", "text-emerald-400");
+                    fbEl.innerText = "✅";
+                    sectionScore++;
+                } else {
+                    inputEl.classList.add("border-red-500", "bg-red-900/20");
+                    inputEl.value = `${inputEl.value} (Correct: ${item.ans})`;
+                    fbEl.innerText = "❌";
+                }
+            });
+            
+            totalScore += sectionScore;
+            
+            const btn = document.getElementById("section-action-btn");
+            btn.innerText = "Next Section →";
+            btn.onclick = () => { currentSection++; renderSection(); };
+        }
+
+        function evaluateMatching() {
+            const answers = dbPool[currentLvl].matching.answers;
+            let sectionScore = 0;
+
+            answers.forEach((ans, idx) => {
+                const inputEl = document.getElementById(`match-${idx}`);
+                const fbEl = document.getElementById(`fb-match-${idx}`);
+                inputEl.disabled = true;
+                fbEl.classList.remove("hidden");
+
+                if (inputEl.value.trim().toUpperCase() === ans.toUpperCase()) {
+                    inputEl.classList.add("border-emerald-500", "bg-emerald-900/20", "text-emerald-400");
+                    fbEl.innerText = "✅";
+                    sectionScore++;
+                } else {
+                    inputEl.classList.add("border-red-500", "bg-red-900/20", "text-red-400");
+                    inputEl.value = `${inputEl.value} -> ${ans}`;
+                    fbEl.innerText = "❌";
+                }
+            });
+
+            totalScore += sectionScore;
+
+            const btn = document.getElementById("section-action-btn");
+            btn.innerText = "Next Section →";
+            btn.onclick = () => { currentSection++; renderSection(); };
+        }
+
+        function evaluateWritten() {
+            const items = dbPool[currentLvl].written;
+            items.forEach((item, idx) => {
+                const inputEl = document.getElementById(`written-${idx}`);
+                const fbEl = document.getElementById(`fb-written-${idx}`);
+                inputEl.disabled = true;
+                fbEl.classList.remove("hidden");
+                fbEl.innerHTML = `<span class="text-amber-400 font-bold block mb-1">Official Solution / Keywords:</span> <span class="text-slate-300 font-mono">${item.ans}</span>`;
+                
+                // Simple auto-grade: if user wrote something decent, give a point.
+                if(inputEl.value.trim().length > 10) totalScore++;
+            });
+
+            const btn = document.getElementById("section-action-btn");
+            btn.innerText = "View Final Score";
+            btn.onclick = () => finishLevel();
+        }
+
+        function finishLevel() {
+            const percentage = Math.round((totalScore / totalWeights) * 100);
+            
+            document.getElementById("quiz-screen").classList.add("hidden");
+            document.getElementById("result-screen").classList.remove("hidden");
+            document.getElementById("level-final-score").innerText = percentage;
+            
+            // Update Dashboard Stats
+            document.getElementById(`status-l${currentLvl}`).innerText = `Completed: ${percentage}%`;
+            document.getElementById(`status-l${currentLvl}`).classList.add("text-emerald-400", "font-bold");
+            
+            // Just sum up percentages for a quick global score metric
+            let global = parseInt(document.getElementById("global-score").innerText) || 0;
+            document.getElementById("global-score").innerText = global + percentage;
+        }
+
+        function exitToMenu() {
+            document.getElementById("quiz-screen").classList.add("hidden");
+            document.getElementById("result-screen").classList.add("hidden");
+            document.getElementById("dashboard-screen").classList.remove("hidden");
+            window.scrollTo(0,0);
+        }
+    </script>
+</body>
+</html>
