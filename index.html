@@ -220,6 +220,16 @@
             renderSection();
         }
 
+        // Helper to safely escape text for use inside HTML attributes
+        function escapeAttr(str) {
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
         function renderSection() {
             const db = dbPool[currentLvl];
             const card = document.getElementById("question-card");
@@ -232,13 +242,13 @@
                 document.getElementById("quiz-progress-text").innerText = `Question ${mcqIndex + 1} of ${db.mcqs.length}`;
                 
                 const item = db.mcqs[mcqIndex];
-                let html = `<p class="text-[15px] font-medium text-slate-100">${item.q}</p><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">`;
+                let html = `<p class="text-[15px] font-medium text-slate-100">${escapeAttr(item.q)}</p><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">`;
                 item.opts.forEach((opt, idx) => {
                     const char = String.fromCharCode(65 + idx);
                     html += `
-                        <button onclick="checkMCQ(this, '${char}', '${item.ans}')" class="mcq-btn text-left bg-slate-700/50 hover:bg-slate-700 p-3 rounded-xl border border-slate-600 text-sm transition flex items-center space-x-3">
+                        <button data-char="${char}" data-correct="${item.ans}" onclick="checkMCQ(this, '${char}', '${item.ans}')" class="mcq-btn text-left bg-slate-700/50 hover:bg-slate-700 p-3 rounded-xl border border-slate-600 text-sm transition flex items-center space-x-3">
                             <span class="font-bold bg-slate-800 text-slate-400 px-2.5 py-1 rounded text-xs">${char}</span>
-                            <span class="text-slate-200">${opt}</span>
+                            <span class="text-slate-200">${escapeAttr(opt)}</span>
                         </button>
                     `;
                 });
@@ -362,8 +372,11 @@
                 btnEl.classList.add("bg-red-900/80", "border-red-500");
                 fb.innerHTML = `❌ هەڵەیە (Incorrect) - The correct answer is <strong>${correct}</strong>`;
                 fb.className = "block text-center text-lg p-3 rounded-xl mt-4 bg-red-950 text-red-400 font-bold border border-red-800";
+
+                // FIX: reliably find and highlight the correct-answer button
+                // using the data-char attribute instead of fragile innerText matching.
                 btns.forEach(b => {
-                    if (b.innerText.includes(`\n${correct}`) || b.innerText.includes(` ${correct}\n`)) { 
+                    if (b.getAttribute("data-char") === correct) {
                         b.classList.add("border-emerald-500", "bg-emerald-900/30");
                     }
                 });
